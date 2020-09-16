@@ -24,4 +24,11 @@ public class Card {
 
   @Column(name = "description")
   private String description;
+
+  public Card(){}
+
+  public Card(String title, String description) {
+    this.title = title;
+    this.description = description;
+  }
 }
