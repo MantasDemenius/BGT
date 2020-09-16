@@ -29,7 +29,6 @@ public class CardController {
   @GetMapping("")
   public List<Card> getCards(){
     try {
-//      throw new Exception();
       return cardService.getCards();
     }catch (Exception ex){
       throw new ResponseStatusException(
@@ -38,12 +37,12 @@ public class CardController {
   }
 
   @PostMapping("")
-  public Card createCard(@RequestBody Card card){
+  public ResponseEntity createCard(@RequestBody Card card){
     return cardService.createCard(card);
   }
 
   @PutMapping("{id}")
-  public Card updateCard(@PathVariable(value = "id") long id, @RequestBody Card card){
+  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody Card card){
     return cardService.updateCard(card, id);
   }
 
