@@ -43,7 +43,6 @@ public class GameController {
     return gameService.getGame(id);
   }
 
-
   @PostMapping("")
   public ResponseEntity createGame(@RequestBody GameDto game) {
     return gameService.createGame(game);
