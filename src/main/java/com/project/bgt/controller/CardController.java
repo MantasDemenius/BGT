@@ -23,32 +23,37 @@ public class CardController {
 
   private final CardService cardService;
 
-  public CardController(CardService cardService){
+  public CardController(CardService cardService) {
     this.cardService = cardService;
   }
 
   @GetMapping("")
-  public List<Card> getCards(){
+  public List<Card> getCards() {
     try {
       return cardService.getCards();
-    }catch (Exception ex){
+    } catch (Exception ex) {
       throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR , "We are working on it");
+        HttpStatus.INTERNAL_SERVER_ERROR, "We are working on it");
     }
   }
 
+  @GetMapping("{id}")
+  public Card getCard(@PathVariable(value = "id") long id) {
+    return cardService.getCard(id);
+  }
+
   @PostMapping("")
-  public ResponseEntity createCard(@RequestBody CardDto card){
+  public ResponseEntity createCard(@RequestBody CardDto card) {
     return cardService.createCard(card);
   }
 
   @PutMapping("{id}")
-  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody CardDto card){
+  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody CardDto card) {
     return cardService.updateCard(card, id);
   }
 
   @DeleteMapping("{id}")
-  public ResponseEntity deleteCard(@PathVariable(value = "id") long id){
+  public ResponseEntity deleteCard(@PathVariable(value = "id") long id) {
     return cardService.deleteCard(id);
   }
 }

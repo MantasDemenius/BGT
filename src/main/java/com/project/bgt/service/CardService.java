@@ -18,7 +18,7 @@ public class CardService {
   private final CardRepository cardRepository;
   private final LanguageService languageService;
 
-  public CardService(CardRepository cardRepository, LanguageService languageService){
+  public CardService(CardRepository cardRepository, LanguageService languageService) {
     this.cardRepository = cardRepository;
     this.languageService = languageService;
   }
@@ -31,7 +31,7 @@ public class CardService {
   public ResponseEntity createCard(CardDto card) {
     CardException.checkCard(card);
     Language language = languageService.findLanguageByCode(card.getLanguageCode());
-    try{
+    try {
 
       Card newCard = cardRepository.save(
         new Card(
@@ -39,8 +39,9 @@ public class CardService {
           card.getDescription(),
           language
         ));
-      return ResponseEntity.status(HttpStatus.CREATED).body("http://localhost:5000/api/cards/" + newCard.getId());
-    }catch(Exception ex){
+      return ResponseEntity.status(HttpStatus.CREATED)
+        .body("http://localhost:5000/api/cards/" + newCard.getId());
+    } catch (Exception ex) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("We are working on it");
     }
   }
@@ -51,9 +52,9 @@ public class CardService {
 
     Card card = cardRepository.findById(id)
       .orElseThrow(() -> new ResponseStatusException(
-          HttpStatus.NOT_FOUND,
-          "Card with this id was not found"
-        ));
+        HttpStatus.NOT_FOUND,
+        "Card with this id was not found"
+      ));
     Language language = languageService.findLanguageByCode(newCard.getLanguageCode());
 
     card.setTitle(newCard.getTitle());
@@ -66,11 +67,19 @@ public class CardService {
   }
 
   public ResponseEntity deleteCard(long id) {
-    try{
+    try {
       cardRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.OK);
-    }catch(Exception ex){
+    } catch (Exception ex) {
       return new ResponseEntity<>("Card with this id was not found", HttpStatus.BAD_REQUEST);
     }
+  }
+
+  public Card getCard(long id) {
+    return cardRepository.findById(id)
+      .orElseThrow(() -> new ResponseStatusException(
+        HttpStatus.NOT_FOUND,
+        "Card with this id was not found"
+      ));
   }
 }

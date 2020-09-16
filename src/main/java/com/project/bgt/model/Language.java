@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.With;
 
 @Data
 @Entity
@@ -32,4 +33,7 @@ public class Language {
 
   @OneToMany(mappedBy = "language")
   private List<Card> cards = new ArrayList<Card>();
+
+  @OneToMany(mappedBy = "language")
+  private List<Game> games = new ArrayList<Game>();
 }
