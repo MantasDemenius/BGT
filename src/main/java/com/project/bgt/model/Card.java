@@ -1,11 +1,17 @@
 package com.project.bgt.model;
 
-import com.sun.istack.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
@@ -25,10 +31,16 @@ public class Card {
   @Column(name = "description")
   private String description;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "language_id")
+  @JsonIgnore
+  private Language language;
+
   public Card(){}
 
-  public Card(String title, String description) {
+  public Card(String title, String description, Language language) {
     this.title = title;
     this.description = description;
+    this.language = language;
   }
 }

@@ -1,6 +1,7 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.Consts;
+import com.project.bgt.dto.CardDto;
 import com.project.bgt.model.Card;
 import com.project.bgt.service.CardService;
 import java.util.List;
@@ -37,12 +38,12 @@ public class CardController {
   }
 
   @PostMapping("")
-  public ResponseEntity createCard(@RequestBody Card card){
+  public ResponseEntity createCard(@RequestBody CardDto card){
     return cardService.createCard(card);
   }
 
   @PutMapping("{id}")
-  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody Card card){
+  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody CardDto card){
     return cardService.updateCard(card, id);
   }
 
