@@ -1,13 +1,9 @@
 package com.project.bgt.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.project.bgt.common.Consts;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.Language;
 import com.project.bgt.service.CardService;

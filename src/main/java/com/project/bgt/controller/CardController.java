@@ -1,11 +1,12 @@
 package com.project.bgt.controller;
 
-import com.project.bgt.common.Consts;
+import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.dto.CardDto;
+import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.service.CardService;
+import java.net.URISyntaxException;
 import java.util.List;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping(Consts.CARDS_PATH)
+@RequestMapping(PathConst.CARDS_PATH)
 public class CardController {
 
   private final CardService cardService;
@@ -32,8 +32,7 @@ public class CardController {
     try {
       return cardService.getCards();
     } catch (Exception ex) {
-      throw new ResponseStatusException(
-        HttpStatus.INTERNAL_SERVER_ERROR, "We are working on it");
+      throw new RecordNotFoundException();
     }
   }
 
@@ -43,7 +42,7 @@ public class CardController {
   }
 
   @PostMapping("")
-  public ResponseEntity createCard(@RequestBody CardDto card) {
+  public ResponseEntity createCard(@RequestBody CardDto card) throws URISyntaxException {
     return cardService.createCard(card);
   }
 

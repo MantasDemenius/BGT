@@ -1,16 +1,20 @@
 package com.project.bgt.service;
 
+import com.project.bgt.common.check.CardCheck;
+import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.CardDto;
-import com.project.bgt.exception.CardException;
+import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.Language;
 import com.project.bgt.repository.CardRepository;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CardService {
@@ -28,33 +32,30 @@ public class CardService {
   }
 
   @Transactional
-  public ResponseEntity createCard(CardDto card) {
-    CardException.checkCard(card);
+  public ResponseEntity createCard(CardDto card) throws URISyntaxException {
+    CardCheck.checkCard(card);
     Language language = languageService.findLanguageByCode(card.getLanguageCode());
-    try {
 
-      Card newCard = cardRepository.save(
-        new Card(
-          card.getTitle(),
-          card.getDescription(),
-          language
-        ));
-      return ResponseEntity.status(HttpStatus.CREATED)
-        .body("http://localhost:5000/api/cards/" + newCard.getId());
-    } catch (Exception ex) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("We are working on it");
-    }
+    Card newCard = cardRepository.save(
+      new Card(
+        card.getTitle(),
+        card.getDescription(),
+        language
+      ));
+
+    URI location = new URI("http://localhost:5000/api/cards/" + newCard.getId());
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(location);
+    return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
   }
 
   @Transactional
   public ResponseEntity updateCard(CardDto newCard, long id) {
-    CardException.checkCard(newCard);
+    CardCheck.checkCard(newCard);
 
     Card card = cardRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(
-        HttpStatus.NOT_FOUND,
-        "Card with this id was not found"
-      ));
+      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID));
+
     Language language = languageService.findLanguageByCode(newCard.getLanguageCode());
 
     card.setTitle(newCard.getTitle());
@@ -71,15 +72,12 @@ public class CardService {
       cardRepository.deleteById(id);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception ex) {
-      return new ResponseEntity<>("Card with this id was not found", HttpStatus.BAD_REQUEST);
+      throw new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID);
     }
   }
 
   public Card getCard(long id) {
     return cardRepository.findById(id)
-      .orElseThrow(() -> new ResponseStatusException(
-        HttpStatus.NOT_FOUND,
-        "Card with this id was not found"
-      ));
+      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID));
   }
 }

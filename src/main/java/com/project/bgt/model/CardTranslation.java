@@ -1,9 +1,6 @@
 package com.project.bgt.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,17 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "card")
-public class Card {
+@Table(name = "card_translation")
+public class CardTranslation {
 
   @Id
   @Column(name = "id", unique = true, nullable = false, updatable = false)
@@ -34,18 +28,19 @@ public class Card {
   @Column(name = "description")
   private String description;
 
-  @OneToMany(mappedBy = "card")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "card_id")
   @JsonIgnore
-  private List<CardTranslation> cardTranslations = new ArrayList<CardTranslation>();
+  private Card card;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "language_id")
   @JsonIgnore
   private Language language;
 
-  public Card(){}
+  public CardTranslation(){}
 
-  public Card(String title, String description, Language language) {
+  public CardTranslation(String title, String description, Language language) {
     this.title = title;
     this.description = description;
     this.language = language;
