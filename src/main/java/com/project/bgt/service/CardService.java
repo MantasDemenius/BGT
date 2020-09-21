@@ -1,6 +1,8 @@
 package com.project.bgt.service;
 
+import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.check.CardCheck;
+import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.CardDto;
 import com.project.bgt.exception.RecordNotFoundException;
@@ -42,12 +44,14 @@ public class CardService {
         card.getDescription(),
         language
       ));
-    String ur = System.getenv("DATABASE_URL");
-    URI location = new URI(ur+ "/api/cards/" + newCard.getId());
+    LocationHeader loc = new LocationHeader();
+//    String ur = System.getenv("DATABASE_URL");
+//    URI location = new URI(ur+ "/api/cards/" + newCard.getId());
 //    URI location = new URI("http://localhost:5000/api/cards/" + newCard.getId());
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.setLocation(location);
-    return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
+//    HttpHeaders responseHeaders = new HttpHeaders();
+//    responseHeaders.setLocation(location);
+//    return new ResponseEntity(loc.getLocationHeaders(PathConst.CARDS_PATH, newCard.getId()), HttpStatus.CREATED);
+    return new ResponseEntity<>(HttpStatus.CREATED);
   }
 
   @Transactional
