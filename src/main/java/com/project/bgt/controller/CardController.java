@@ -5,7 +5,9 @@ import com.project.bgt.dto.CardDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.service.CardService;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLOutput;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,7 @@ public class CardController {
   }
 
   @GetMapping("")
-  public List<Card> getCards() {
+  public List<Card> getCards() throws URISyntaxException {
     try {
       return cardService.getCards();
     } catch (Exception ex) {

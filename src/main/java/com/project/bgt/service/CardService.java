@@ -42,8 +42,9 @@ public class CardService {
         card.getDescription(),
         language
       ));
-
-    URI location = new URI("http://localhost:5000/api/cards/" + newCard.getId());
+    String ur = System.getenv("DATABASE_URL");
+    URI location = new URI(ur+ "/api/cards/" + newCard.getId());
+//    URI location = new URI("http://localhost:5000/api/cards/" + newCard.getId());
     HttpHeaders responseHeaders = new HttpHeaders();
     responseHeaders.setLocation(location);
     return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
