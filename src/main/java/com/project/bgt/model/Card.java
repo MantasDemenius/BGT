@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -42,6 +43,14 @@ public class Card {
   @JoinColumn(name = "language_id")
   @JsonIgnore
   private Language language;
+
+  @ManyToMany
+  @JoinTable(
+    name = "game_card",
+    joinColumns = @JoinColumn(name = "card_id"),
+    inverseJoinColumns = @JoinColumn(name = "game_id"))
+  @JsonIgnore
+  List<Game> cardsGame = new ArrayList<Game>();
 
   public Card(){}
 

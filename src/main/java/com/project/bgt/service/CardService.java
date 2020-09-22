@@ -7,6 +7,7 @@ import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.CardDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
+import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.repository.CardRepository;
 import java.util.List;
@@ -20,10 +21,13 @@ public class CardService {
 
   private final CardRepository cardRepository;
   private final LanguageService languageService;
+  private final GameService gameService;
 
-  public CardService(CardRepository cardRepository, LanguageService languageService) {
+  public CardService(CardRepository cardRepository, LanguageService languageService,
+    GameService gameService) {
     this.cardRepository = cardRepository;
     this.languageService = languageService;
+    this.gameService = gameService;
   }
 
   public List<Card> getCards() {
@@ -34,13 +38,16 @@ public class CardService {
   public ResponseEntity createCard(CardDto cardDto) {
     ValueCheck.checkValues(cardDto);
     Language language = languageService.findLanguageByCode(cardDto.getLanguageCode());
+    Game game = gameService.getGame(cardDto.getGameId());
 
-    Card newCard = cardRepository.save(
-      new Card(
-        cardDto.getTitle(),
-        cardDto.getDescription(),
-        language
-      ));
+    Card newCard = new Card(
+      cardDto.getTitle(),
+      cardDto.getDescription(),
+      language
+    );
+    newCard.getCardsGame().add(game);
+
+     cardRepository.save(newCard);
 
     return new ResponseEntity(
       LocationHeader.getLocationHeaders(PathConst.CARDS_PATH, newCard.getId()),
