@@ -1,20 +1,16 @@
 package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
-import com.project.bgt.common.check.CardCheck;
+import com.project.bgt.common.check.ValueCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.CardDto;
 import com.project.bgt.dto.CardTranslationDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.CardTranslation;
 import com.project.bgt.model.Language;
 import com.project.bgt.repository.CardTranslationRepository;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -39,7 +35,7 @@ public class CardTranslationService {
 
 
   public ResponseEntity createCardTranslation(CardTranslationDto cardTranslationDto) {
-    CardCheck.checkCard(cardTranslationDto);
+    ValueCheck.checkValues(cardTranslationDto);
     Language language = languageService.findLanguageByCode(cardTranslationDto.getLanguageCode());
     Card card = cardService.getCard(cardTranslationDto.getCardId());
 
@@ -50,6 +46,7 @@ public class CardTranslationService {
         language,
         card
       ));
+
     return new ResponseEntity(
       LocationHeader.getLocationHeaders(PathConst.CARD_TRANSLATION_PATH, newCardTranslation.getId()),
       HttpStatus.CREATED);
@@ -61,7 +58,7 @@ public class CardTranslationService {
   }
 
   public ResponseEntity updateCardTranslation(CardTranslationDto newCardTranslationDto, long cardTranslationId) {
-    CardCheck.checkCard(newCardTranslationDto);
+    ValueCheck.checkValues(newCardTranslationDto);
 
     CardTranslation cardTranslation = getCardTranslation(cardTranslationId);
 

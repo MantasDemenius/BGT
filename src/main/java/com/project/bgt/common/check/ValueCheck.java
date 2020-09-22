@@ -5,9 +5,9 @@ import com.project.bgt.dto.CardDto;
 import com.project.bgt.dto.ValueBase;
 import com.project.bgt.exception.BadRequestException;
 
-public class CardCheck {
+public class ValueCheck {
 
-  public static void checkCard(ValueBase value) {
+  public static void checkValues(ValueBase value) {
     checkTitle(value);
     checkDescription(value);
     checkTitleLength(value);

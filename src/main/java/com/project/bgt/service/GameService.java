@@ -1,6 +1,9 @@
 package com.project.bgt.service;
 
+import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.check.GameCheck;
+import com.project.bgt.common.check.ValueCheck;
+import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.GameDto;
 import com.project.bgt.exception.RecordNotFoundException;
@@ -31,53 +34,48 @@ public class GameService {
     return gameRepository.findAll();
   }
 
-  public ResponseEntity createGame(GameDto game) throws URISyntaxException {
-    GameCheck.checkGame(game);
-    Language language = languageService.findLanguageByCode(game.getLanguageCode());
+  public ResponseEntity createGame(GameDto gameDto) {
+    ValueCheck.checkValues(gameDto);
+    Language language = languageService.findLanguageByCode(gameDto.getLanguageCode());
 
     Game newGame = gameRepository.save(
       new Game(
-        game.getTitle(),
-        game.getDescription(),
+        gameDto.getTitle(),
+        gameDto.getDescription(),
         language
       ));
 
-    URI location = new URI("http://localhost:5000/api/games/" + newGame.getId());
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.setLocation(location);
-    return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
+    return new ResponseEntity(
+      LocationHeader.getLocationHeaders(PathConst.GAME_PATH, newGame.getId()),
+      HttpStatus.CREATED);
   }
 
+  public ResponseEntity updateGame(GameDto newGameDto, long gameId) {
+    ValueCheck.checkValues(newGameDto);
 
-  @Transactional
-  public ResponseEntity updateGame(GameDto newGame, long id) {
-    GameCheck.checkGame(newGame);
+    Language language = languageService.findLanguageByCode(newGameDto.getLanguageCode());
+    Game game = getGame(gameId);
 
-    Game game = gameRepository.findById(id)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID));
-
-    Language language = languageService.findLanguageByCode(newGame.getLanguageCode());
-
-    game.setTitle(newGame.getTitle());
-    game.setDescription(newGame.getDescription());
+    game.setTitle(newGameDto.getTitle());
+    game.setDescription(newGameDto.getDescription());
     game.setLanguage(language);
 
     gameRepository.save(game);
 
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  public ResponseEntity deleteGame(long id) {
+  public ResponseEntity deleteGame(long gameId) {
     try {
-      gameRepository.deleteById(id);
+      gameRepository.deleteById(gameId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception ex) {
       throw new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID);
     }
   }
 
-  public Game getGame(long id) {
-    return gameRepository.findById(id)
+  public Game getGame(long gameId) {
+    return gameRepository.findById(gameId)
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID));
   }
 }

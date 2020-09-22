@@ -3,12 +3,9 @@ package com.project.bgt.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
-@AllArgsConstructor
-public class GameDto {
+public class GameDto extends ValueBase{
 
-  String title;
-  String description;
-  String languageCode;
-
+  public GameDto(String title, String description, String languageCode) {
+    super(title, description, languageCode);
+  }
 }

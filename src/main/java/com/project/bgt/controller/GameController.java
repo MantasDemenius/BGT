@@ -36,23 +36,23 @@ public class GameController {
     }
   }
 
-  @GetMapping("{id}")
-  public Game getGame(@PathVariable(value = "id") long id) {
-    return gameService.getGame(id);
+  @GetMapping("{gameId}")
+  public Game getGame(@PathVariable(value = "gameId") long gameId) {
+    return gameService.getGame(gameId);
   }
 
   @PostMapping("")
-  public ResponseEntity createGame(@RequestBody GameDto game) throws URISyntaxException {
-    return gameService.createGame(game);
+  public ResponseEntity createGame(@RequestBody GameDto gameDto) {
+    return gameService.createGame(gameDto);
   }
 
-  @PutMapping("{id}")
-  public ResponseEntity updateGame(@PathVariable(value = "id") long id, @RequestBody GameDto game) {
-    return gameService.updateGame(game, id);
+  @PutMapping("{gameId}")
+  public ResponseEntity updateGame(@PathVariable(value = "gameId") long gameId, @RequestBody GameDto gameDto) {
+    return gameService.updateGame(gameDto, gameId);
   }
 
-  @DeleteMapping("{id}")
-  public ResponseEntity deleteCard(@PathVariable(value = "id") long id) {
-    return gameService.deleteGame(id);
+  @DeleteMapping("{gameId}")
+  public ResponseEntity deleteGame(@PathVariable(value = "gameId") long gameId) {
+    return gameService.deleteGame(gameId);
   }
 }
