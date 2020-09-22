@@ -1,6 +1,7 @@
 package com.project.bgt.model;
 
 import com.project.bgt.common.constant.DateFormatConst;
+import com.project.bgt.common.message.ErrorMessages;
 import java.sql.Timestamp;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class ApiError{
   }
 
   public ApiError(){
+    this.message = ErrorMessages.WORKING_ON_IT;
   }
 
 }

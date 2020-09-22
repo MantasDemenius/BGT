@@ -40,9 +40,10 @@ public class CardTranslation {
 
   public CardTranslation(){}
 
-  public CardTranslation(String title, String description, Language language) {
+  public CardTranslation(String title, String description, Language language, Card card) {
     this.title = title;
     this.description = description;
     this.language = language;
+    this.card = card;
   }
 }

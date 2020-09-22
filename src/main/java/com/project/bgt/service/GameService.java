@@ -42,10 +42,10 @@ public class GameService {
         language
       ));
 
-//    URI location = new URI("http://localhost:5000/api/games/" + newGame.getId());
-//    HttpHeaders responseHeaders = new HttpHeaders();
-//    responseHeaders.setLocation(location);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    URI location = new URI("http://localhost:5000/api/games/" + newGame.getId());
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.setLocation(location);
+    return new ResponseEntity(responseHeaders, HttpStatus.CREATED);
   }
 
 

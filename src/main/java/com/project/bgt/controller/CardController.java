@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.SQLOutput;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +31,7 @@ public class CardController {
   }
 
   @GetMapping("")
-  public List<Card> getCards() throws URISyntaxException {
+  public List<Card> getCards() {
     try {
       return cardService.getCards();
     } catch (Exception ex) {
@@ -38,23 +39,23 @@ public class CardController {
     }
   }
 
-  @GetMapping("{id}")
-  public Card getCard(@PathVariable(value = "id") long id) {
-    return cardService.getCard(id);
+  @GetMapping("{cardId}")
+  public Card getCard(@PathVariable(value = "cardId") long cardId) {
+    return cardService.getCard(cardId);
   }
 
   @PostMapping("")
-  public ResponseEntity createCard(@RequestBody CardDto card) throws URISyntaxException {
-    return cardService.createCard(card);
+  public ResponseEntity createCard(@RequestBody CardDto cardDto) {
+    return cardService.createCard(cardDto);
   }
 
-  @PutMapping("{id}")
-  public ResponseEntity updateCard(@PathVariable(value = "id") long id, @RequestBody CardDto card) {
-    return cardService.updateCard(card, id);
+  @PutMapping("{cardId}")
+  public ResponseEntity updateCard(@PathVariable(value = "cardId") long cardId, @RequestBody CardDto cardDto) {
+    return cardService.updateCard(cardDto, cardId);
   }
 
-  @DeleteMapping("{id}")
-  public ResponseEntity deleteCard(@PathVariable(value = "id") long id) {
-    return cardService.deleteCard(id);
+  @DeleteMapping("{cardId}")
+  public ResponseEntity deleteCard(@PathVariable(value = "cardId") long cardId) {
+    return cardService.deleteCard(cardId);
   }
 }

@@ -5,6 +5,7 @@ import com.project.bgt.common.check.CardCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.CardDto;
+import com.project.bgt.exception.BadRequestException;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.Language;
@@ -34,55 +35,49 @@ public class CardService {
   }
 
   @Transactional
-  public ResponseEntity createCard(CardDto card) throws URISyntaxException {
-    CardCheck.checkCard(card);
-    Language language = languageService.findLanguageByCode(card.getLanguageCode());
+  public ResponseEntity createCard(CardDto cardDto) {
+    CardCheck.checkCard(cardDto);
+    Language language = languageService.findLanguageByCode(cardDto.getLanguageCode());
 
     Card newCard = cardRepository.save(
       new Card(
-        card.getTitle(),
-        card.getDescription(),
+        cardDto.getTitle(),
+        cardDto.getDescription(),
         language
       ));
-    LocationHeader loc = new LocationHeader();
-//    String ur = System.getenv("DATABASE_URL");
-//    URI location = new URI(ur+ "/api/cards/" + newCard.getId());
-//    URI location = new URI("http://localhost:5000/api/cards/" + newCard.getId());
-//    HttpHeaders responseHeaders = new HttpHeaders();
-//    responseHeaders.setLocation(location);
-//    return new ResponseEntity(loc.getLocationHeaders(PathConst.CARDS_PATH, newCard.getId()), HttpStatus.CREATED);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+
+    return new ResponseEntity(
+      LocationHeader.getLocationHeaders(PathConst.CARD_TRANSLATION_PATH, newCard.getId()),
+      HttpStatus.CREATED);
   }
 
-  @Transactional
-  public ResponseEntity updateCard(CardDto newCard, long id) {
-    CardCheck.checkCard(newCard);
 
-    Card card = cardRepository.findById(id)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID));
+  public ResponseEntity updateCard(CardDto newCardDto, long cardId) {
+    CardCheck.checkCard(newCardDto);
 
-    Language language = languageService.findLanguageByCode(newCard.getLanguageCode());
+    Language language = languageService.findLanguageByCode(newCardDto.getLanguageCode());
+    Card card = getCard(cardId);
 
-    card.setTitle(newCard.getTitle());
-    card.setDescription(newCard.getDescription());
+    card.setTitle(newCardDto.getTitle());
+    card.setDescription(newCardDto.getDescription());
     card.setLanguage(language);
 
     cardRepository.save(card);
 
-    return new ResponseEntity<>(HttpStatus.OK);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  public ResponseEntity deleteCard(long id) {
+  public ResponseEntity deleteCard(long cardId) {
     try {
-      cardRepository.deleteById(id);
+      cardRepository.deleteById(cardId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception ex) {
       throw new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID);
     }
   }
 
-  public Card getCard(long id) {
-    return cardRepository.findById(id)
+  public Card getCard(long cardId) {
+    return cardRepository.findById(cardId)
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID));
   }
 }
