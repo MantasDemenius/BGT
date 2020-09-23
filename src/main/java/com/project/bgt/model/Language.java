@@ -36,4 +36,11 @@ public class Language {
 
   @OneToMany(mappedBy = "language")
   private List<Game> games = new ArrayList<Game>();
+
+  public Language(){}
+
+  public Language(String name, String code) {
+    this.name = name;
+    this.code = code;
+  }
 }
