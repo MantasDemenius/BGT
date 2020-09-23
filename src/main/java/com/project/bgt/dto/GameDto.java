@@ -5,7 +5,18 @@ import lombok.Data;
 
 public class GameDto extends ValueBase{
 
-  public GameDto(String title, String description, String languageCode) {
-    super(title, description, languageCode);
+  private long originalGameId;
+
+  public GameDto(String title, String description, long languageId, long originalGameId) {
+    super(title, description, languageId);
+    this.originalGameId = originalGameId;
+  }
+
+  public long getOriginalGameId() {
+    return originalGameId;
+  }
+
+  public void setOriginalGameId(long originalGameId) {
+    this.originalGameId = originalGameId;
   }
 }

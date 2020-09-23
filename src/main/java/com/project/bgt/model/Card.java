@@ -21,7 +21,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "card")
+@Table(name = "card", schema = "bgtmin")
 public class Card {
 
   @Id
@@ -35,14 +35,22 @@ public class Card {
   @Column(name = "description")
   private String description;
 
-  @OneToMany(mappedBy = "card")
-  @JsonIgnore
-  private List<CardTranslation> cardTranslations = new ArrayList<CardTranslation>();
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "language_id")
   @JsonIgnore
   private Language language;
+
+  @ManyToMany(mappedBy = "originalCards")
+  @JsonIgnore
+  List<Card> translatedCards = new ArrayList<Card>();
+
+  @ManyToMany
+  @JoinTable(
+    name = "card_relationship",
+    joinColumns = @JoinColumn(name = "translated_card_id"),
+    inverseJoinColumns = @JoinColumn(name = "original_card_id"))
+  @JsonIgnore
+  List<Card> originalCards = new ArrayList<Card>();
 
   @ManyToMany
   @JoinTable(

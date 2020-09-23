@@ -1,5 +1,6 @@
 package com.project.bgt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -17,7 +18,7 @@ import lombok.With;
 
 @Data
 @Entity
-@Table(name = "language")
+@Table(name = "language", schema = "bgtmin")
 public class Language {
 
   @Id
@@ -36,4 +37,11 @@ public class Language {
 
   @OneToMany(mappedBy = "language")
   private List<Game> games = new ArrayList<Game>();
+
+  public Language(){}
+
+  public Language(String name, String code) {
+    this.name = name;
+    this.code = code;
+  }
 }

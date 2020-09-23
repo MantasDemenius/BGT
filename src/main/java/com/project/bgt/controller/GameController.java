@@ -28,7 +28,7 @@ public class GameController {
   }
 
   @GetMapping("")
-  public List<Game> getGames() {
+  public List<GameDto> getGames() {
     try {
       return gameService.getGames();
     } catch (Exception ex) {
@@ -37,8 +37,8 @@ public class GameController {
   }
 
   @GetMapping("{gameId}")
-  public Game getGame(@PathVariable(value = "gameId") long gameId) {
-    return gameService.getGame(gameId);
+  public GameDto getGame(@PathVariable(value = "gameId") long gameId) {
+    return gameService.getGameDto(gameId);
   }
 
   @PostMapping("")
