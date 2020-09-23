@@ -45,7 +45,7 @@ public class CardController {
   }
 
   @PostMapping("")
-  public ResponseEntity createCard(@RequestBody CardDto cardDto) {
+  public ResponseEntity<Card> createCard(@RequestBody CardDto cardDto) {
     return cardService.createCard(cardDto);
   }
 

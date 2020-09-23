@@ -3,7 +3,7 @@ package com.project.bgt.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-public class CardDto extends ValueBase{
+public class CardDto extends ValueBase {
 
   long gameId;
 

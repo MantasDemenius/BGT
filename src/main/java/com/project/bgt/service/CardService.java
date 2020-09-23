@@ -47,7 +47,7 @@ public class CardService {
     );
     newCard.getCardsGame().add(game);
 
-     cardRepository.save(newCard);
+    cardRepository.save(newCard);
 
     return new ResponseEntity(
       LocationHeader.getLocationHeaders(PathConst.CARDS_PATH, newCard.getId()),

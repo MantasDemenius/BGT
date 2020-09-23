@@ -11,6 +11,4 @@ public class ValueBase {
   String description;
   String languageCode;
 
-
-
 }
