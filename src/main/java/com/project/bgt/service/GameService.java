@@ -45,6 +45,13 @@ public class GameService {
         language
       ));
 
+    if(gameDto.getOriginalGameId() != 0){
+      Game game = getGame(gameDto.getOriginalGameId());
+      newGame.getOriginalGames().add(game);
+    }
+
+    gameRepository.save(newGame);
+
     return new ResponseEntity(
       LocationHeader.getLocationHeaders(PathConst.GAME_PATH, newGame.getId()),
       HttpStatus.CREATED);
@@ -65,6 +72,7 @@ public class GameService {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
+  //find error for foreign key violation
   public ResponseEntity deleteGame(long gameId) {
     try {
       gameRepository.deleteById(gameId);

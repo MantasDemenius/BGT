@@ -47,6 +47,11 @@ public class CardService {
     );
     newCard.getCardsGame().add(game);
 
+    if(cardDto.getOriginalCardId() != 0){
+      Card card = getCard(cardDto.getOriginalCardId());
+      newCard.getOriginalCards().add(card);
+    }
+
     cardRepository.save(newCard);
 
     return new ResponseEntity(
