@@ -5,12 +5,14 @@ import com.project.bgt.common.check.ValueCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.CardDto;
+import com.project.bgt.dto.GameDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.repository.CardRepository;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +32,8 @@ public class CardService {
     this.gameService = gameService;
   }
 
-  public List<Card> getCards() {
-    return cardRepository.findAll();
+  public List<CardDto> getCards() {
+    return convertCardsToCardDtos(cardRepository.findAll());
   }
 
   @Transactional
@@ -87,5 +89,25 @@ public class CardService {
   public Card getCard(long cardId) {
     return cardRepository.findById(cardId)
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.CARD_NOT_FOUND_ID));
+  }
+
+  public CardDto getCardDto(long gameId){
+    return convertCardToCardDto(getCard(gameId));
+  }
+
+  private List<CardDto> convertCardsToCardDtos(List<Card> cards) {
+    return cards.stream()
+      .map(this::convertCardToCardDto)
+      .collect(Collectors.toList());
+  }
+
+  private CardDto convertCardToCardDto(Card card) {
+    return new CardDto(
+      card.getTitle(),
+      card.getDescription(),
+      card.getCardsGame().get(0).getId(),
+      card.getLanguage().getId(),
+      card.getOriginalCards().isEmpty() ? 0 : card.getOriginalCards().get(0).getId()
+    );
   }
 }

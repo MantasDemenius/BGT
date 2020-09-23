@@ -31,7 +31,7 @@ public class CardController {
   }
 
   @GetMapping("")
-  public List<Card> getCards() {
+  public List<CardDto> getCards() {
     try {
       return cardService.getCards();
     } catch (Exception ex) {
@@ -40,8 +40,8 @@ public class CardController {
   }
 
   @GetMapping("{cardId}")
-  public Card getCard(@PathVariable(value = "cardId") long cardId) {
-    return cardService.getCard(cardId);
+  public CardDto getCard(@PathVariable(value = "cardId") long cardId) {
+    return cardService.getCardDto(cardId);
   }
 
   @PostMapping("")

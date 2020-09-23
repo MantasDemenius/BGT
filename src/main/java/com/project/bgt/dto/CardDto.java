@@ -1,16 +1,19 @@
 package com.project.bgt.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 public class CardDto extends ValueBase {
 
   long gameId;
   long originalCardId;
 
-  public CardDto(String title, String description, long languageId, long gameId) {
+//  public CardDto(String title, String description, long languageId, long gameId) {
+//    super(title, description, languageId);
+//    this.gameId = gameId;
+//  }
+
+  public CardDto(String title, String description, long languageId, long gameId, long originalCardId) {
     super(title, description, languageId);
     this.gameId = gameId;
+    this.originalCardId = originalCardId;
   }
 
   public long getGameId() {
