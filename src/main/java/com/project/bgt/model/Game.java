@@ -20,7 +20,7 @@ import lombok.Data;
 @Data
 @Entity
 @AllArgsConstructor
-@Table(name = "game", schema = "bgtmin")
+@Table(name = "game", schema = "public")
 public class Game {
 
   @Id

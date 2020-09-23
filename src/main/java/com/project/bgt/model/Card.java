@@ -21,7 +21,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "card", schema = "bgtmin")
+@Table(name = "card", schema = "public")
 public class Card {
 
   @Id

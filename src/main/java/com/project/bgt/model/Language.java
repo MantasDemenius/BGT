@@ -18,7 +18,7 @@ import lombok.With;
 
 @Data
 @Entity
-@Table(name = "language", schema = "bgtmin")
+@Table(name = "language", schema = "public")
 public class Language {
 
   @Id
