@@ -9,6 +9,6 @@ public class ValueBase {
 
   String title;
   String description;
-  String languageCode;
+  long languageId;
 
 }

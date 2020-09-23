@@ -6,6 +6,7 @@ import com.project.bgt.common.check.ValueCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.GameDto;
+import com.project.bgt.dto.LanguageDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
@@ -13,6 +14,7 @@ import com.project.bgt.repository.GameRepository;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,13 +32,13 @@ public class GameService {
     this.languageService = languageService;
   }
 
-  public List<Game> getGames() {
-    return gameRepository.findAll();
+  public List<GameDto> getGames() {
+    return convertGamesToGameDtos(gameRepository.findAll());
   }
 
   public ResponseEntity createGame(GameDto gameDto) {
     ValueCheck.checkValues(gameDto);
-    Language language = languageService.findLanguageByCode(gameDto.getLanguageCode());
+    Language language = languageService.getLanguage(gameDto.getLanguageId());
 
     Game newGame = gameRepository.save(
       new Game(
@@ -60,7 +62,7 @@ public class GameService {
   public ResponseEntity updateGame(GameDto newGameDto, long gameId) {
     ValueCheck.checkValues(newGameDto);
 
-    Language language = languageService.findLanguageByCode(newGameDto.getLanguageCode());
+    Language language = languageService.getLanguage(newGameDto.getLanguageId());
     Game game = getGame(gameId);
 
     game.setTitle(newGameDto.getTitle());
@@ -85,5 +87,24 @@ public class GameService {
   public Game getGame(long gameId) {
     return gameRepository.findById(gameId)
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID));
+  }
+
+  public GameDto getGameDto(long gameId){
+    return convertGameToGameDto(getGame(gameId));
+  }
+
+  private List<GameDto> convertGamesToGameDtos(List<Game> games) {
+    return games.stream()
+      .map(this::convertGameToGameDto)
+      .collect(Collectors.toList());
+  }
+
+  private GameDto convertGameToGameDto(Game game) {
+    return new GameDto(
+      game.getTitle(),
+      game.getDescription(),
+      game.getLanguage().getId(),
+      game.getOriginalGames().isEmpty() ? 0 : game.getOriginalGames().get(0).getId()
+    );
   }
 }

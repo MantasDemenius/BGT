@@ -8,8 +8,8 @@ public class CardDto extends ValueBase {
   long gameId;
   long originalCardId;
 
-  public CardDto(String title, String description, String languageCode, long gameId) {
-    super(title, description, languageCode);
+  public CardDto(String title, String description, long languageId, long gameId) {
+    super(title, description, languageId);
     this.gameId = gameId;
   }
 

@@ -27,15 +27,13 @@ public class LanguageService {
   public LanguageService(LanguageRepository languageRepository) {
     this.languageRepository = languageRepository;
   }
-
-  public Language findLanguageByCode(String languageCode) {
-    LanguageCheck.checkIfLanguageProvided(languageCode);
-
-    Language language = languageRepository.findByCode(languageCode);
-    LanguageCheck.checkLanguage(language);
-
-    return language;
-  }
+//  public Language findLanguageByCode(String languageCode) {
+//
+//    Language language = languageRepository.findByCode(languageCode);
+//    LanguageCheck.checkIfLanguageProvided(language);
+//
+//    return language;
+//  }
 
   public List<LanguageDto> getLanguages() {
     return convertLanguagesToLanguageDtos(languageRepository.findAll());
@@ -51,7 +49,7 @@ public class LanguageService {
   }
 
   public ResponseEntity createLanguage(LanguageDto languageDto) {
-//    ValueCheck.checkValues(cardDto);
+    LanguageCheck.checkLanguage(languageDto);
 
     Language newLanguage = new Language(
       languageDto.getName(),
@@ -67,7 +65,7 @@ public class LanguageService {
 
 
   public ResponseEntity updateLanguage(LanguageDto newLanguageDto, long languageId) {
-//    ValueCheck.checkValues(newCardDto);
+    LanguageCheck.checkLanguage(newLanguageDto);
     Language language = getLanguage(languageId);
 
     language.setName(newLanguageDto.getName());

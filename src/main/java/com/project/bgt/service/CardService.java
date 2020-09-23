@@ -37,7 +37,7 @@ public class CardService {
   @Transactional
   public ResponseEntity createCard(CardDto cardDto) {
     ValueCheck.checkValues(cardDto);
-    Language language = languageService.findLanguageByCode(cardDto.getLanguageCode());
+    Language language = languageService.getLanguage(cardDto.getLanguageId());
     Game game = gameService.getGame(cardDto.getGameId());
 
     Card newCard = new Card(
@@ -63,7 +63,7 @@ public class CardService {
   public ResponseEntity updateCard(CardDto newCardDto, long cardId) {
     ValueCheck.checkValues(newCardDto);
 
-    Language language = languageService.findLanguageByCode(newCardDto.getLanguageCode());
+    Language language = languageService.getLanguage(newCardDto.getLanguageId());
     Card card = getCard(cardId);
 
     card.setTitle(newCardDto.getTitle());
