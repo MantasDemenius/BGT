@@ -1,22 +1,18 @@
 package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
-import com.project.bgt.common.check.GameCheck;
 import com.project.bgt.common.check.ValueCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.GameDto;
-import com.project.bgt.dto.LanguageDto;
 import com.project.bgt.exception.RecordNotFoundException;
+import com.project.bgt.model.Card;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
+import com.project.bgt.repository.CardRepository;
 import com.project.bgt.repository.GameRepository;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,10 +22,12 @@ public class GameService {
 
   private final GameRepository gameRepository;
   private final LanguageService languageService;
+  private final CardRepository cardRepository;
 
-  public GameService(GameRepository gameRepository, LanguageService languageService) {
+  public GameService(GameRepository gameRepository, LanguageService languageService, CardRepository cardRepository) {
     this.gameRepository = gameRepository;
     this.languageService = languageService;
+    this.cardRepository = cardRepository;
   }
 
   public List<GameDto> getGames() {

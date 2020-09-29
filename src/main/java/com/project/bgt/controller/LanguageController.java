@@ -3,6 +3,8 @@ package com.project.bgt.controller;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.dto.LanguageDto;
 import com.project.bgt.exception.RecordNotFoundException;
+import com.project.bgt.model.Card;
+import com.project.bgt.model.Language;
 import com.project.bgt.service.LanguageService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -53,5 +55,10 @@ public class LanguageController {
   @DeleteMapping("{languageId}")
   public ResponseEntity deleteLanguage(@PathVariable(value = "languageId") long languageId) {
     return languageService.deleteLanguage(languageId);
+  }
+
+  @GetMapping("{languageId}" + PathConst.CARDS_PATH)
+  public List<Card> getLanguageCards(@PathVariable(value = "languageId") long languageId){
+    return languageService.getLanguageCards(languageId);
   }
 }

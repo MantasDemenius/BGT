@@ -2,19 +2,16 @@ package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.check.LanguageCheck;
-import com.project.bgt.common.check.ValueCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.CardDto;
 import com.project.bgt.dto.LanguageDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
-import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
+import com.project.bgt.repository.CardRepository;
 import com.project.bgt.repository.LanguageRepository;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -23,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class LanguageService {
 
   private final LanguageRepository languageRepository;
+  private final CardRepository cardRepository;
 
-  public LanguageService(LanguageRepository languageRepository) {
+  public LanguageService(LanguageRepository languageRepository, CardRepository cardRepository) {
     this.languageRepository = languageRepository;
+    this.cardRepository = cardRepository;
   }
 //  public Language findLanguageByCode(String languageCode) {
 //
@@ -97,5 +96,11 @@ public class LanguageService {
       language.getName(),
       language.getCode()
     );
+  }
+
+  public List<Card> getLanguageCards(long languageId) {
+    Language language = getLanguage(languageId);
+    List<Card> card = cardRepository.findAllByLanguageId(languageId);
+    return card;
   }
 }

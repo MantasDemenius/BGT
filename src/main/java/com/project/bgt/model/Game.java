@@ -36,6 +36,7 @@ public class Game {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "language_id")
+  @JsonIgnore
   private Language language;
 
   @ManyToMany(mappedBy = "originalGames")

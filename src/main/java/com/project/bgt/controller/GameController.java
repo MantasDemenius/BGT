@@ -55,4 +55,5 @@ public class GameController {
   public ResponseEntity deleteGame(@PathVariable(value = "gameId") long gameId) {
     return gameService.deleteGame(gameId);
   }
+
 }
