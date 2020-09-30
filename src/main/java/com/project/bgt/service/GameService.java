@@ -48,6 +48,7 @@ public class GameService {
 
   public ResponseEntity createGame(GameDto gameDto) {
     ComponentCheck.checkComponents(gameDto);
+    Game originalGame = getGame(gameDto.getOriginalGameId());
     Language language = languageService.getLanguage(gameDto.getLanguageId());
 
     Game newGame = gameRepository.save(
@@ -68,6 +69,8 @@ public class GameService {
       LocationHeader.getLocationHeaders(PathConst.GAME_PATH, newGame.getId()),
       HttpStatus.CREATED);
   }
+
+
 
   public ResponseEntity updateGame(GameDto newGameDto, long gameId) {
     ComponentCheck.checkComponents(newGameDto);
@@ -117,24 +120,6 @@ public class GameService {
       game.getOriginalGames().isEmpty() ? 0 : game.getOriginalGames().get(0).getId()
     );
   }
-
-//  public GameComponentDto getGameComponents(long gameId, Boolean allLanguages) {
-//    GameDto gameDto = getGameDto(gameId);
-//    List<CardDto> cardDto = cardService.getCardDtosByGameId(gameId);
-//
-//    if(!allLanguages){
-//      cardDto = cardDto
-//        .stream()
-//        .filter(x -> x.languageIdEquals(gameDto.getLanguageId()))
-//        .collect(Collectors.toList());
-//    }
-//
-//    GameComponentDto gameComponent = new GameComponentDto();
-//    gameComponent.setGame(gameDto);
-//    gameComponent.setCards(cardDto);
-//
-//    return gameComponent;
-//  }
 
   public GameComponentDto getGameComponents(long gameId, Boolean allLanguages) {
     GameComponentDto gameComponent = new GameComponentDto();
