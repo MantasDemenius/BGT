@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class ValueBase {
+public class ComponentBase {
 
   String title;
   String description;

@@ -58,4 +58,9 @@ public class CardController {
   public ResponseEntity deleteCard(@PathVariable(value = "cardId") long cardId) {
     return cardService.deleteCard(cardId);
   }
+
+//  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
+//  public List<CardDto> getCardsByGameId(@PathVariable(value = "gameId") long gameId){
+//    return cardService.getCardsByGameId(gameId);
+//  }
 }

@@ -1,18 +1,21 @@
 package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
-import com.project.bgt.common.check.ValueCheck;
+import com.project.bgt.common.check.ComponentCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
+import com.project.bgt.dto.CardDto;
+import com.project.bgt.dto.GameComponentDto;
 import com.project.bgt.dto.GameDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Card;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
-import com.project.bgt.repository.CardRepository;
 import com.project.bgt.repository.GameRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,22 +23,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class GameService {
 
-  private final GameRepository gameRepository;
-  private final LanguageService languageService;
-  private final CardRepository cardRepository;
+  private LanguageService languageService;
+  private CardService cardService;
 
-  public GameService(GameRepository gameRepository, LanguageService languageService, CardRepository cardRepository) {
-    this.gameRepository = gameRepository;
-    this.languageService = languageService;
-    this.cardRepository = cardRepository;
+  private GameRepository gameRepository;
+
+  @Autowired
+  public void setCardService(CardService cardService){
+    this.cardService = cardService;
   }
+  @Autowired
+  public void setLanguageService(LanguageService languageService){
+    this.languageService = languageService;
+  }
+  @Autowired
+  public void setGameRepository(GameRepository gameRepository){
+    this.gameRepository = gameRepository;
+  }
+
 
   public List<GameDto> getGames() {
     return convertGamesToGameDtos(gameRepository.findAll());
   }
 
   public ResponseEntity createGame(GameDto gameDto) {
-    ValueCheck.checkValues(gameDto);
+    ComponentCheck.checkComponents(gameDto);
     Language language = languageService.getLanguage(gameDto.getLanguageId());
 
     Game newGame = gameRepository.save(
@@ -45,7 +57,7 @@ public class GameService {
         language
       ));
 
-    if(gameDto.getOriginalGameId() != 0){
+    if (gameDto.getOriginalGameId() != 0) {
       Game game = getGame(gameDto.getOriginalGameId());
       newGame.getOriginalGames().add(game);
     }
@@ -58,7 +70,7 @@ public class GameService {
   }
 
   public ResponseEntity updateGame(GameDto newGameDto, long gameId) {
-    ValueCheck.checkValues(newGameDto);
+    ComponentCheck.checkComponents(newGameDto);
 
     Language language = languageService.getLanguage(newGameDto.getLanguageId());
     Game game = getGame(gameId);
@@ -87,7 +99,7 @@ public class GameService {
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID));
   }
 
-  public GameDto getGameDto(long gameId){
+  public GameDto getGameDto(long gameId) {
     return convertGameToGameDto(getGame(gameId));
   }
 
@@ -105,4 +117,63 @@ public class GameService {
       game.getOriginalGames().isEmpty() ? 0 : game.getOriginalGames().get(0).getId()
     );
   }
+
+//  public GameComponentDto getGameComponents(long gameId, Boolean allLanguages) {
+//    GameDto gameDto = getGameDto(gameId);
+//    List<CardDto> cardDto = cardService.getCardDtosByGameId(gameId);
+//
+//    if(!allLanguages){
+//      cardDto = cardDto
+//        .stream()
+//        .filter(x -> x.languageIdEquals(gameDto.getLanguageId()))
+//        .collect(Collectors.toList());
+//    }
+//
+//    GameComponentDto gameComponent = new GameComponentDto();
+//    gameComponent.setGame(gameDto);
+//    gameComponent.setCards(cardDto);
+//
+//    return gameComponent;
+//  }
+
+  public GameComponentDto getGameComponents(long gameId, Boolean allLanguages) {
+    GameComponentDto gameComponent = new GameComponentDto();
+
+    GameDto gameDto = getGameDto(gameId);
+    List<CardDto> cards = cardService.convertCardsToCardDtos(
+      cardService.getAllCardTranslations(cardService.getCardsByGameId(gameId)));
+
+    if(!allLanguages){
+      cards = cards
+        .stream()
+        .filter(x -> x.languageIdEquals(gameDto.getLanguageId()))
+        .collect(Collectors.toList());
+    }
+
+    gameComponent.setGame(gameDto);
+    gameComponent.setCards(cards);
+
+    return gameComponent;
+  }
+
+  public List<Game> getGamesByLanguageId(long languageId){
+    return gameRepository.findAllByLanguageId(languageId);
+  }
+
+  public List<GameComponentDto> getGameComponentsByLanguageId(long languageId) {
+    List<GameComponentDto> gameComponents = new ArrayList<GameComponentDto>();
+    List<Game> games = getGamesByLanguageId(languageId);
+
+    for(Game game : games){
+      GameComponentDto gameComponent = new GameComponentDto();
+
+      List<CardDto> cards = cardService.getCardDtosByGameId(game.getId());
+      gameComponent.setGame(convertGameToGameDto(game));
+      gameComponent.setCards(cards);
+
+      gameComponents.add(gameComponent);
+    }
+    return gameComponents;
+  }
 }
+

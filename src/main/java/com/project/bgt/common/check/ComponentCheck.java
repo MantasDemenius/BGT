@@ -1,22 +1,21 @@
 package com.project.bgt.common.check;
 
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.CardDto;
-import com.project.bgt.dto.ValueBase;
+import com.project.bgt.dto.ComponentBase;
 import com.project.bgt.exception.BadRequestException;
 
-public class ValueCheck {
+public class ComponentCheck {
 
-  public static void checkValues(ValueBase value) {
-    checkTitle(value);
-    checkDescription(value);
-    checkTitleLength(value);
-    checkDescriptionLength(value);
+  public static void checkComponents(ComponentBase component) {
+    checkTitle(component);
+    checkDescription(component);
+    checkTitleLength(component);
+    checkDescriptionLength(component);
   }
 
-  public static void checkDescription(ValueBase value) {
+  public static void checkDescription(ComponentBase component) {
     try {
-      if (value.getDescription().isEmpty()) {
+      if (component.getDescription().isEmpty()) {
         throw new BadRequestException(ErrorMessages.DESCRIPTION_NOT_EMPTY);
       }
     } catch (NullPointerException ex) {
@@ -24,9 +23,9 @@ public class ValueCheck {
     }
   }
 
-  public static void checkTitle(ValueBase value) {
+  public static void checkTitle(ComponentBase component) {
     try {
-      if (value.getTitle().isEmpty()) {
+      if (component.getTitle().isEmpty()) {
         throw new BadRequestException(ErrorMessages.TITLE_NOT_EMPTY);
       }
     } catch (NullPointerException ex) {
@@ -34,14 +33,14 @@ public class ValueCheck {
     }
   }
 
-  public static void checkDescriptionLength(ValueBase value) {
-    if (value.getDescription().length() > 500) {
+  public static void checkDescriptionLength(ComponentBase component) {
+    if (component.getDescription().length() > 500) {
       throw new BadRequestException(ErrorMessages.DESCRIPTION_LONG);
     }
   }
 
-  public static void checkTitleLength(ValueBase value) {
-    if (value.getTitle().length() > 500) {
+  public static void checkTitleLength(ComponentBase component) {
+    if (component.getTitle().length() > 500) {
       throw new BadRequestException(ErrorMessages.TITLE_LONG);
     }
   }

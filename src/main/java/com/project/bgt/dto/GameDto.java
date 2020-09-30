@@ -1,9 +1,6 @@
 package com.project.bgt.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
-public class GameDto extends ValueBase{
+public class GameDto extends ComponentBase {
 
   private long originalGameId;
 
