@@ -5,6 +5,7 @@ import com.project.bgt.dto.GameComponentDto;
 import com.project.bgt.dto.GameDto;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.GameService;
+import java.nio.file.Path;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,7 +37,7 @@ public class GameController {
     }
   }
 
-  @GetMapping("{gameId}")
+  @GetMapping("/{gameId}")
   public GameDto getGame(@PathVariable(value = "gameId") long gameId) {
     return gameService.getGameDto(gameId);
   }
@@ -46,26 +47,38 @@ public class GameController {
     return gameService.createGame(gameDto);
   }
 
-  @PutMapping("{gameId}")
+  @PutMapping("/{gameId}")
   public ResponseEntity updateGame(@PathVariable(value = "gameId") long gameId,
     @RequestBody GameDto gameDto) {
     return gameService.updateGame(gameDto, gameId);
   }
 
-  @DeleteMapping("{gameId}")
+  @DeleteMapping("/{gameId}")
   public ResponseEntity deleteGame(@PathVariable(value = "gameId") long gameId) {
     return gameService.deleteGame(gameId);
   }
 
-  @GetMapping("{gameId}" + PathConst.COMPONENTS_PATH)
+  @GetMapping("/{gameId}" + PathConst.COMPONENTS_PATH)
   public GameComponentDto getGameComponents(@PathVariable(value = "gameId") long gameId,
     @RequestParam(name = "allLanguages") Boolean allLanguages) {
     return gameService.getGameComponents(gameId, allLanguages);
   }
 
+  //get all games by language
   @GetMapping(PathConst.COMPONENTS_PATH + PathConst.LANGUAGE_PATH + "/{languageId}")
   public List<GameComponentDto> getGameComponentsByLanguageId(
     @PathVariable(value = "languageId") long languageId) {
     return gameService.getGameComponentsByLanguageId(languageId);
   }
+
+  @GetMapping("/original")
+  public List<GameDto> getOriginalGames(){
+    return gameService.getOriginalGames();
+  }
 }
+
+
+
+//Get all games in original languages DONE
+//Get all languages game is translated DONE
+//Get game and components in a specific language DONE

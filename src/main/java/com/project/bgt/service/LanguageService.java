@@ -103,4 +103,8 @@ public class LanguageService {
     List<Card> card = cardRepository.findAllByLanguageId(languageId);
     return card;
   }
+
+  public List<String> getGameLanguages(long gameId) {
+    return languageRepository.findAllGameLanguages(gameId);
+  }
 }

@@ -61,4 +61,9 @@ public class LanguageController {
   public List<Card> getLanguageCards(@PathVariable(value = "languageId") long languageId){
     return languageService.getLanguageCards(languageId);
   }
+
+  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
+  public List<String> getGameLanguages(@PathVariable(value = "gameId") long gameId){
+    return languageService.getGameLanguages(gameId);
+  }
 }

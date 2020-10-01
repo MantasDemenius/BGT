@@ -160,5 +160,9 @@ public class GameService {
     }
     return gameComponents;
   }
+
+  public List<GameDto> getOriginalGames() {
+    return convertGamesToGameDtos(gameRepository.findAllOriginalGames());
+  }
 }
 
