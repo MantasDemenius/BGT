@@ -4,9 +4,9 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-import com.project.bgt.model.Card;
+import com.project.bgt.model.Component;
 import com.project.bgt.model.Language;
-import com.project.bgt.service.CardService;
+import com.project.bgt.service.ComponentService;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -15,20 +15,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(CardController.class)
-class CardControllerTest {
+@WebMvcTest(ComponentController.class)
+class ComponentControllerTest {
 
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private CardService cardService;
+  private ComponentService componentService;
 
   @Test
   void getCards() {
-    List<Card> cards = new ArrayList<Card>();
-    cards.add(new Card("best", "", new Language()));
-    when(cardService.getCards()).thenReturn(cards);
+    List<Component> components = new ArrayList<Component>();
+    components.add(new Component("best", "", new Language()));
+//    when(componentService.getCards()).thenReturn(components);
 
 //    this.mockMvc.perform(get(Consts.CARDS_PATH)).andDo(print()).andExpect(status().isOk()).andExpect(content())
   }

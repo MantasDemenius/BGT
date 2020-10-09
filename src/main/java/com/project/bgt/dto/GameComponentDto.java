@@ -1,12 +1,11 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.Card;
 import java.util.List;
 
 public class GameComponentDto {
 
   private GameDto game;
-  private List<CardDto> cards;
+  private List<ComponentDto> cards;
 
   public GameDto getGame() {
     return game;
@@ -16,11 +15,11 @@ public class GameComponentDto {
     this.game = game;
   }
 
-  public List<CardDto> getCards() {
+  public List<ComponentDto> getCards() {
     return cards;
   }
 
-  public void setCards(List<CardDto> cards) {
+  public void setCards(List<ComponentDto> cards) {
     this.cards = cards;
   }
 }

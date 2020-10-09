@@ -1,20 +1,15 @@
 package com.project.bgt.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
-import lombok.With;
 
 @Data
 @Entity
@@ -33,7 +28,7 @@ public class Language {
   private String code;
 
   @OneToMany(mappedBy = "language")
-  private List<Card> cards = new ArrayList<Card>();
+  private List<Component> components = new ArrayList<Component>();
 
   @OneToMany(mappedBy = "language")
   private List<Game> games = new ArrayList<Game>();

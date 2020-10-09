@@ -51,9 +51,9 @@ public class Game {
   @JsonIgnore
   List<Game> originalGames = new ArrayList<Game>();
 
-  @ManyToMany(mappedBy = "cardsGame")
+  @ManyToMany(mappedBy = "componentsGame")
   @JsonIgnore
-  List<Card> gameCards = new ArrayList<Card>();
+  List<Component> gameComponents = new ArrayList<Component>();
 
   public Game(){}
 

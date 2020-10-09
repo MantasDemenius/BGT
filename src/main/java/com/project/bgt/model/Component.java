@@ -3,7 +3,6 @@ package com.project.bgt.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,15 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "card", schema = "public")
-public class Card {
+@Table(name = "component", schema = "public")
+public class Component {
 
   @Id
   @Column(name = "id", unique = true, nullable = false, updatable = false)
@@ -40,29 +37,29 @@ public class Card {
   @JsonIgnore
   private Language language;
 
-  @ManyToMany(mappedBy = "originalCards")
+  @ManyToMany(mappedBy = "originalComponents")
   @JsonIgnore
-  List<Card> translatedCards = new ArrayList<Card>();
+  List<Component> translatedComponents = new ArrayList<Component>();
 
   @ManyToMany
   @JoinTable(
-    name = "card_relationship",
-    joinColumns = @JoinColumn(name = "translated_card_id"),
-    inverseJoinColumns = @JoinColumn(name = "original_card_id"))
+    name = "component_relationship",
+    joinColumns = @JoinColumn(name = "translated_component_id"),
+    inverseJoinColumns = @JoinColumn(name = "original_component_id"))
   @JsonIgnore
-  List<Card> originalCards = new ArrayList<Card>();
+  List<Component> originalComponents = new ArrayList<Component>();
 
   @ManyToMany
   @JoinTable(
-    name = "game_card",
-    joinColumns = @JoinColumn(name = "card_id"),
+    name = "game_component",
+    joinColumns = @JoinColumn(name = "component_id"),
     inverseJoinColumns = @JoinColumn(name = "game_id"))
   @JsonIgnore
-  List<Game> cardsGame = new ArrayList<Game>();
+  List<Game> componentsGame = new ArrayList<Game>();
 
-  public Card(){}
+  public Component(){}
 
-  public Card(String title, String description, Language language) {
+  public Component(String title, String description, Language language) {
     this.title = title;
     this.description = description;
     this.language = language;

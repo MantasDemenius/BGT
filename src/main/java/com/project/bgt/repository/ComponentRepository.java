@@ -1,6 +1,6 @@
 package com.project.bgt.repository;
 
-import com.project.bgt.model.Card;
+import com.project.bgt.model.Component;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,14 +8,14 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CardRepository extends JpaRepository<Card, Long> {
+public interface ComponentRepository extends JpaRepository<Component, Long> {
 
-  List<Card> findAllByLanguageId(long languageId);
+  List<Component> findAllByLanguageId(long languageId);
 
   @Query(
     value = "select c.* from card c inner join game_card gc on c.id = gc.card_id where gc.game_id = :gameId",
     nativeQuery = true)
-  List<Card> findAllByGameId(@Param("gameId") long gameId);
+  List<Component> findAllByGameId(@Param("gameId") long gameId);
 
   @Query(
     value = "select \n"
@@ -25,13 +25,13 @@ public interface CardRepository extends JpaRepository<Card, Long> {
       + "\ton c.id = cr.original_card_id \n"
       + "inner join card ct \n"
       + "\ton cr.translated_card_id = ct.id \n"
-      + "where c.id = :cardId\n"
+      + "where c.id = :componentId\n"
       + "union\n"
       + "select\n"
       + "\tc.*\n"
       + "from card c\n"
-      + "where c.id = :cardId",
+      + "where c.id = :componentId",
     nativeQuery = true
   )
-  List<Card> findAllCardTranslationsByOriginalCardId(@Param("cardId") long cardId);
+  List<Component> findAllComponentTranslationsByOriginalComponentId(@Param("componentId") long cardId);
 }

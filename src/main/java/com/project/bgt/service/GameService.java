@@ -4,11 +4,10 @@ import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.check.ComponentCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.CardDto;
+import com.project.bgt.dto.ComponentDto;
 import com.project.bgt.dto.GameComponentDto;
 import com.project.bgt.dto.GameDto;
 import com.project.bgt.exception.RecordNotFoundException;
-import com.project.bgt.model.Card;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.repository.GameRepository;
@@ -24,13 +23,13 @@ import org.springframework.stereotype.Service;
 public class GameService {
 
   private LanguageService languageService;
-  private CardService cardService;
+  private ComponentService componentService;
 
   private GameRepository gameRepository;
 
   @Autowired
-  public void setCardService(CardService cardService){
-    this.cardService = cardService;
+  public void setComponentService(ComponentService componentService){
+    this.componentService = componentService;
   }
   @Autowired
   public void setLanguageService(LanguageService languageService){
@@ -125,8 +124,8 @@ public class GameService {
     GameComponentDto gameComponent = new GameComponentDto();
 
     GameDto gameDto = getGameDto(gameId);
-    List<CardDto> cards = cardService.convertCardsToCardDtos(
-      cardService.getAllCardTranslations(cardService.getCardsByGameId(gameId)));
+    List<ComponentDto> cards = componentService.convertComponentsToComponentDtos(
+      componentService.getAllComponentTranslations(componentService.getComponentsByGameId(gameId)));
 
     if(!allLanguages){
       cards = cards
@@ -152,7 +151,7 @@ public class GameService {
     for(Game game : games){
       GameComponentDto gameComponent = new GameComponentDto();
 
-      List<CardDto> cards = cardService.getCardDtosByGameId(game.getId());
+      List<ComponentDto> cards = componentService.getComponentDtosByGameId(game.getId());
       gameComponent.setGame(convertGameToGameDto(game));
       gameComponent.setCards(cards);
 

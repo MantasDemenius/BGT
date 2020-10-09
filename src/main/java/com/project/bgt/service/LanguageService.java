@@ -6,9 +6,8 @@ import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.LanguageDto;
 import com.project.bgt.exception.RecordNotFoundException;
-import com.project.bgt.model.Card;
 import com.project.bgt.model.Language;
-import com.project.bgt.repository.CardRepository;
+import com.project.bgt.repository.ComponentRepository;
 import com.project.bgt.repository.LanguageRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,11 +19,11 @@ import org.springframework.stereotype.Service;
 public class LanguageService {
 
   private final LanguageRepository languageRepository;
-  private final CardRepository cardRepository;
+  private final ComponentRepository componentRepository;
 
-  public LanguageService(LanguageRepository languageRepository, CardRepository cardRepository) {
+  public LanguageService(LanguageRepository languageRepository, ComponentRepository componentRepository) {
     this.languageRepository = languageRepository;
-    this.cardRepository = cardRepository;
+    this.componentRepository = componentRepository;
   }
 //  public Language findLanguageByCode(String languageCode) {
 //
@@ -96,12 +95,6 @@ public class LanguageService {
       language.getName(),
       language.getCode()
     );
-  }
-
-  public List<Card> getLanguageCards(long languageId) {
-    Language language = getLanguage(languageId);
-    List<Card> card = cardRepository.findAllByLanguageId(languageId);
-    return card;
   }
 
   public List<String> getGameLanguages(long gameId) {
