@@ -14,11 +14,6 @@ public enum ComponentCategory {
     this.code=code;
   }
 
-  @JsonCreator
-  public static ComponentCategory decode(final String code) {
-    return Stream.of(ComponentCategory.values()).filter(targetEnum -> targetEnum.code.equals(code)).findFirst().orElse(null);
-  }
-
   @JsonValue
   public String getCode() {
     return code;

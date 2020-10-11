@@ -1,24 +1,20 @@
 package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
-import com.project.bgt.common.check.ComponentCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.common.serviceHelper.ComponentServiceHelper;
-import com.project.bgt.common.serviceHelper.GameServiceHelper;
 import com.project.bgt.common.serviceHelper.ServiceHelper;
 import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.exception.BadRequestException;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Component;
-import com.project.bgt.model.ComponentCategory;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.model.User;
 import com.project.bgt.repository.ComponentRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,19 +32,22 @@ public class ComponentService {
   private ComponentRepository componentRepository;
 
   @Autowired
-  public void setGameService(GameService gameService){
+  public void setGameService(GameService gameService) {
     this.gameService = gameService;
   }
+
   @Autowired
-  public void setLanguageService(LanguageService languageService){
+  public void setLanguageService(LanguageService languageService) {
     this.languageService = languageService;
   }
+
   @Autowired
   public void setUserService(UserService userService) {
     this.userService = userService;
   }
+
   @Autowired
-  public void setComponentRepository(ComponentRepository componentRepository){
+  public void setComponentRepository(ComponentRepository componentRepository) {
     this.componentRepository = componentRepository;
   }
 
@@ -57,22 +56,22 @@ public class ComponentService {
     return componentServiceHelper.convertComponentsToComponentDTOs(componentRepository.findAll());
   }
 
-  public List<Component> getComponentsByGameId(long gameId){
+  public List<Component> getComponentsByGameId(long gameId) {
     return componentRepository.findAllByGameId(gameId);
   }
 
-  public List<ComponentDTO> getComponentDTOsByGameId(long gameId){
+  public List<ComponentDTO> getComponentDTOsByGameId(long gameId) {
     return componentServiceHelper.convertComponentsToComponentDTOs(getComponentsByGameId(gameId));
   }
 
-  public List<Component> getAllComponentTranslationsByOriginalComponentId(long ComponentId){
+  public List<Component> getAllComponentTranslationsByOriginalComponentId(long ComponentId) {
     return componentRepository.findAllComponentTranslationsByOriginalComponentId(ComponentId);
   }
 
-  public List<Component> getAllComponentTranslations(List<Component> Components){
+  public List<Component> getAllComponentTranslations(List<Component> Components) {
     List<Component> allComponents = new ArrayList<Component>();
 
-    for(Component component : Components){
+    for (Component component : Components) {
       allComponents.addAll(getAllComponentTranslationsByOriginalComponentId(component.getId()));
     }
 
@@ -98,7 +97,7 @@ public class ComponentService {
       componentDTO.getCategory()
     );
 
-    if(!serviceHelper.isOriginal(componentDTO.getOriginalComponentId())){
+    if (!serviceHelper.isOriginal(componentDTO.getOriginalComponentId())) {
       Component component = getComponent(componentDTO.getOriginalComponentId());
       newComponent.getOriginalComponents().add(component);
     }
@@ -110,7 +109,7 @@ public class ComponentService {
       HttpStatus.CREATED);
   }
 
-//  update title, description
+  //  update title, description
   public ResponseEntity updateComponent(ComponentDTO newComponentDTO, long ComponentId) {
 //    ComponentCheck.checkComponents(newComponentDTO);
     Component component = getComponent(ComponentId);
@@ -139,7 +138,7 @@ public class ComponentService {
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.COMPONENT_NOT_FOUND_ID));
   }
 
-  public ComponentDTO getComponentDTO(long ComponentId){
+  public ComponentDTO getComponentDTO(long ComponentId) {
     return componentServiceHelper.convertComponentToComponentDTO(getComponent(ComponentId));
   }
 
