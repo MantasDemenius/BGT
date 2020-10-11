@@ -28,6 +28,9 @@ public class Game {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private long id;
 
+  @Column(name = "author")
+  private String author;
+
   @Column(name = "title",  length = 50)
   private String title;
 
@@ -38,6 +41,10 @@ public class Game {
   @JoinColumn(name = "language_id")
   @JsonIgnore
   private Language language;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
 
   @ManyToMany(mappedBy = "originalGames")
   @JsonIgnore
@@ -57,9 +64,11 @@ public class Game {
 
   public Game(){}
 
-  public Game(String title, String description, Language language) {
+  public Game(Language language, User user, String author, String title, String description) {
+    this.language = language;
+    this.user = user;
+    this.author = author;
     this.title = title;
     this.description = description;
-    this.language = language;
   }
 }

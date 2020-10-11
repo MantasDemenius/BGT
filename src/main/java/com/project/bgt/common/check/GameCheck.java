@@ -1,21 +1,19 @@
 package com.project.bgt.common.check;
 
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.GameDto;
+import com.project.bgt.dto.GameDTO;
 import com.project.bgt.exception.BadRequestException;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 public class GameCheck {
 
-  public static void checkGame(GameDto game) {
+  public static void checkGame(GameDTO game) {
     checkTitle(game);
     checkDescription(game);
     checkTitleLength(game);
     checkDescriptionLength(game);
   }
 
-  public static void checkDescription(GameDto game) {
+  public static void checkDescription(GameDTO game) {
     try {
       if (game.getDescription().isEmpty()) {
         throw new BadRequestException(ErrorMessages.DESCRIPTION_NOT_EMPTY);
@@ -25,7 +23,7 @@ public class GameCheck {
     }
   }
 
-  public static void checkTitle(GameDto game) {
+  public static void checkTitle(GameDTO game) {
     try {
       if (game.getTitle().isEmpty()) {
         throw new BadRequestException(ErrorMessages.TITLE_NOT_EMPTY);
@@ -35,13 +33,13 @@ public class GameCheck {
     }
   }
 
-  public static void checkDescriptionLength(GameDto game) {
+  public static void checkDescriptionLength(GameDTO game) {
     if (game.getDescription().length() > 500) {
       throw new BadRequestException(ErrorMessages.DESCRIPTION_LONG);
     }
   }
 
-  public static void checkTitleLength(GameDto game) {
+  public static void checkTitleLength(GameDTO game) {
     if (game.getTitle().length() > 500) {
       throw new BadRequestException(ErrorMessages.TITLE_LONG);
     }

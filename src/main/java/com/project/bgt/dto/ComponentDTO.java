@@ -1,16 +1,15 @@
 package com.project.bgt.dto;
 
-public class ComponentDto extends ComponentBase {
+public class ComponentDTO extends ComponentBase {
 
   long userId;
   long gameId;
   long originalComponentId;
 
-  public ComponentDto(String title, String description, long languageId, long gameId, long originalComponentId, long userId) {
+  public ComponentDTO(String title, String description, long languageId, long gameId, long originalComponentId) {
     super(title, description, languageId);
     this.gameId = gameId;
     this.originalComponentId = originalComponentId;
-    this.userId = userId;
   }
 
   public boolean languageIdEquals(long languageId){

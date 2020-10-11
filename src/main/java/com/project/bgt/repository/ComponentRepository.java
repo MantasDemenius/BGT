@@ -13,25 +13,30 @@ public interface ComponentRepository extends JpaRepository<Component, Long> {
   List<Component> findAllByLanguageId(long languageId);
 
   @Query(
-    value = "select c.* from card c inner join game_card gc on c.id = gc.card_id where gc.game_id = :gameId",
+    value = "select \n"
+      + "\tc.*\n"
+      + "from component c\n"
+      + "inner join game_component gc\n"
+      + "\ton c.id = gc.component_id\n"
+      + "where gc.game_id = :gameId",
     nativeQuery = true)
   List<Component> findAllByGameId(@Param("gameId") long gameId);
 
   @Query(
     value = "select \n"
       + "\tct.* \n"
-      + "from card c \n"
-      + "inner join card_relationship cr \n"
-      + "\ton c.id = cr.original_card_id \n"
-      + "inner join card ct \n"
-      + "\ton cr.translated_card_id = ct.id \n"
+      + "from component c \n"
+      + "inner join component_relationship cr \n"
+      + "\ton c.id = cr.original_component_id\n"
+      + "inner join component ct \n"
+      + "\ton cr.translated_component_id = ct.id \n"
       + "where c.id = :componentId\n"
       + "union\n"
       + "select\n"
       + "\tc.*\n"
-      + "from card c\n"
+      + "from component c\n"
       + "where c.id = :componentId",
     nativeQuery = true
   )
-  List<Component> findAllComponentTranslationsByOriginalComponentId(@Param("componentId") long cardId);
+  List<Component> findAllComponentTranslationsByOriginalComponentId(@Param("componentId") long componentId);
 }

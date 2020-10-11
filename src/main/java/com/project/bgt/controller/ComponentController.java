@@ -1,9 +1,8 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
-import com.project.bgt.dto.ComponentDto;
+import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.exception.RecordNotFoundException;
-import com.project.bgt.model.Component;
 import com.project.bgt.service.ComponentService;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +26,7 @@ public class ComponentController {
   }
 
   @GetMapping("")
-  public List<ComponentDto> getComponents() {
+  public List<ComponentDTO> getComponents() {
     try {
       return componentService.getComponents();
     } catch (Exception ex) {
@@ -36,17 +35,17 @@ public class ComponentController {
   }
 
   @GetMapping("{componentId}")
-  public ComponentDto getComponentById(@PathVariable(value = "componentId") long componentId) {
+  public ComponentDTO getComponentById(@PathVariable(value = "componentId") long componentId) {
     return componentService.getComponentDto(componentId);
   }
 
   @PostMapping("")
-  public ResponseEntity createComponent(@RequestBody ComponentDto componentDto) {
+  public ResponseEntity createComponent(@RequestBody ComponentDTO componentDto) {
     return componentService.createComponent(componentDto);
   }
 
   @PutMapping("{componentId}")
-  public ResponseEntity updateComponent(@PathVariable(value = "componentId") long componentId, @RequestBody ComponentDto componentDto) {
+  public ResponseEntity updateComponent(@PathVariable(value = "componentId") long componentId, @RequestBody ComponentDTO componentDto) {
     return componentService.updateComponent(componentDto, componentId);
   }
 

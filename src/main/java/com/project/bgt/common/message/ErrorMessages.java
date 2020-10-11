@@ -26,6 +26,7 @@ public class ErrorMessages {
 
   public final static String COMPONENT_NOT_FOUND_ID = "Component with this id was not found";
   public final static String GAME_NOT_FOUND_ID = "Game with this id was not found";
+  public final static String USER_NOT_FOUND_ID = "User was not found";
 
   public final static String TYPE_INCORRECT = "Path variable is in incorrect type";
   public final static String REQUIRED_PARAMETER_NOT_PRESENT = "Required parameter is not present";

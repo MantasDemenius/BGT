@@ -1,11 +1,10 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
-import com.project.bgt.dto.GameComponentDto;
-import com.project.bgt.dto.GameDto;
+import com.project.bgt.dto.GameComponentDTO;
+import com.project.bgt.dto.GameDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.GameService;
-import java.nio.file.Path;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +28,7 @@ public class GameController {
   }
 
   @GetMapping("")
-  public List<GameDto> getGames() {
+  public List<GameDTO> getGames() {
     try {
       return gameService.getGames();
     } catch (Exception ex) {
@@ -38,18 +37,18 @@ public class GameController {
   }
 
   @GetMapping("/{gameId}")
-  public GameDto getGame(@PathVariable(value = "gameId") long gameId) {
-    return gameService.getGameDto(gameId);
+  public GameDTO getGame(@PathVariable(value = "gameId") long gameId) {
+    return gameService.getGameDTO(gameId);
   }
 
   @PostMapping("")
-  public ResponseEntity createGame(@RequestBody GameDto gameDto) {
+  public ResponseEntity createGame(@RequestBody GameDTO gameDto) {
     return gameService.createGame(gameDto);
   }
 
   @PutMapping("/{gameId}")
   public ResponseEntity updateGame(@PathVariable(value = "gameId") long gameId,
-    @RequestBody GameDto gameDto) {
+    @RequestBody GameDTO gameDto) {
     return gameService.updateGame(gameDto, gameId);
   }
 
@@ -59,20 +58,20 @@ public class GameController {
   }
 
   @GetMapping("/{gameId}" + PathConst.COMPONENTS_PATH)
-  public GameComponentDto getGameComponents(@PathVariable(value = "gameId") long gameId,
+  public GameComponentDTO getGameComponents(@PathVariable(value = "gameId") long gameId,
     @RequestParam(name = "allLanguages") Boolean allLanguages) {
     return gameService.getGameComponents(gameId, allLanguages);
   }
 
   //get all games by language
   @GetMapping(PathConst.COMPONENTS_PATH + PathConst.LANGUAGE_PATH + "/{languageId}")
-  public List<GameComponentDto> getGameComponentsByLanguageId(
+  public List<GameComponentDTO> getAllGamesWithComponentsByLanguageId(
     @PathVariable(value = "languageId") long languageId) {
-    return gameService.getGameComponentsByLanguageId(languageId);
+    return gameService.getAllGamesWithComponentsByLanguageId(languageId);
   }
 
   @GetMapping("/original")
-  public List<GameDto> getOriginalGames(){
+  public List<GameDTO> getOriginalGames(){
     return gameService.getOriginalGames();
   }
 }

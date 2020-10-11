@@ -4,7 +4,7 @@ import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.check.ComponentCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.ComponentDto;
+import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Component;
 import com.project.bgt.model.Game;
@@ -40,7 +40,7 @@ public class ComponentService {
   }
 
 
-  public List<ComponentDto> getComponents() {
+  public List<ComponentDTO> getComponents() {
     return convertComponentsToComponentDtos(componentRepository.findAll());
   }
 
@@ -48,7 +48,7 @@ public class ComponentService {
     return componentRepository.findAllByGameId(gameId);
   }
 
-  public List<ComponentDto> getComponentDtosByGameId(long gameId){
+  public List<ComponentDTO> getComponentDTOsByGameId(long gameId){
     return convertComponentsToComponentDtos(getComponentsByGameId(gameId));
   }
 
@@ -67,7 +67,7 @@ public class ComponentService {
   }
 
   @Transactional
-  public ResponseEntity createComponent(ComponentDto componentDto) {
+  public ResponseEntity createComponent(ComponentDTO componentDto) {
     ComponentCheck.checkComponents(componentDto);
     Language language = languageService.getLanguage(componentDto.getLanguageId());
     Game game = gameService.getGame(componentDto.getGameId());
@@ -92,14 +92,14 @@ public class ComponentService {
   }
 
 
-  public ResponseEntity updateComponent(ComponentDto newComponentDto, long ComponentId) {
-    ComponentCheck.checkComponents(newComponentDto);
+  public ResponseEntity updateComponent(ComponentDTO newComponentDTO, long ComponentId) {
+    ComponentCheck.checkComponents(newComponentDTO);
 
-    Language language = languageService.getLanguage(newComponentDto.getLanguageId());
+    Language language = languageService.getLanguage(newComponentDTO.getLanguageId());
     Component component = getComponent(ComponentId);
 
-    component.setTitle(newComponentDto.getTitle());
-    component.setDescription(newComponentDto.getDescription());
+    component.setTitle(newComponentDTO.getTitle());
+    component.setDescription(newComponentDTO.getDescription());
     component.setLanguage(language);
 
     componentRepository.save(component);
@@ -121,18 +121,18 @@ public class ComponentService {
       .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.COMPONENT_NOT_FOUND_ID));
   }
 
-  public ComponentDto getComponentDto(long ComponentId){
+  public ComponentDTO getComponentDto(long ComponentId){
     return convertComponentToComponentDto(getComponent(ComponentId));
   }
 
-  public List<ComponentDto> convertComponentsToComponentDtos(List<Component> Components) {
+  public List<ComponentDTO> convertComponentsToComponentDtos(List<Component> Components) {
     return Components.stream()
       .map(this::convertComponentToComponentDto)
       .collect(Collectors.toList());
   }
 
-  public ComponentDto convertComponentToComponentDto(Component component) {
-    return new ComponentDto(
+  public ComponentDTO convertComponentToComponentDto(Component component) {
+    return new ComponentDTO(
       component.getTitle(),
       component.getDescription(),
       component.getLanguage().getId(),

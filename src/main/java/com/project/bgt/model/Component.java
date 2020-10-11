@@ -37,6 +37,10 @@ public class Component {
   @JsonIgnore
   private Language language;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id")
+  private User user;
+
   @ManyToMany(mappedBy = "originalComponents")
   @JsonIgnore
   List<Component> translatedComponents = new ArrayList<Component>();
