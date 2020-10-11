@@ -34,9 +34,9 @@ public class ComponentController {
     }
   }
 
-  @GetMapping("{componentId}")
+  @GetMapping("/{componentId}")
   public ComponentDTO getComponentById(@PathVariable(value = "componentId") long componentId) {
-    return componentService.getComponentDto(componentId);
+    return componentService.getComponentDTO(componentId);
   }
 
   @PostMapping("")
@@ -44,18 +44,18 @@ public class ComponentController {
     return componentService.createComponent(componentDto);
   }
 
-  @PutMapping("{componentId}")
+  @PutMapping("/{componentId}")
   public ResponseEntity updateComponent(@PathVariable(value = "componentId") long componentId, @RequestBody ComponentDTO componentDto) {
     return componentService.updateComponent(componentDto, componentId);
   }
 
-  @DeleteMapping("{componentId}")
+  @DeleteMapping("/{componentId}")
   public ResponseEntity deleteComponent(@PathVariable(value = "componentId") long componentId) {
     return componentService.deleteComponent(componentId);
   }
 
-//  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
-//  public List<ComponentDto> getComponentsByGameId(@PathVariable(value = "gameId") long gameId){
-//    return Componentservice.getComponentsByGameId(gameId);
-//  }
+  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
+  public List<ComponentDTO> getComponentsByGameId(@PathVariable(value = "gameId") long gameId){
+    return componentService.getComponentDTOsByGameId(gameId);
+  }
 }

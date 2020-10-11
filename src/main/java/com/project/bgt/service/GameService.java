@@ -17,6 +17,7 @@ import com.project.bgt.model.User;
 import com.project.bgt.repository.GameRepository;
 import java.util.ArrayList;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -58,24 +59,23 @@ public class GameService {
     return gameServiceHelper.convertGamesToGameDTOs(gameRepository.findAll());
   }
 
-
-  //Create game translations, new dto
-  public ResponseEntity createGame(GameDTO gameDto) {
+  @Transactional
+  public ResponseEntity createGame(GameDTO gameDTO) {
 //    ComponentCheck.checkComponents(gameDto);
-    Language language = languageService.getLanguage(gameDto.getLanguageId());
-    User user = userService.getUser(gameDto.getUserId());
+    Language language = languageService.getLanguage(gameDTO.getLanguageId());
+    User user = userService.getUser(gameDTO.getUserId());
     ServiceHelper serviceHelper = new ServiceHelper();
 
     Game newGame = new Game(
       language,
       user,
-      gameDto.getAuthor(),
-      gameDto.getTitle(),
-      gameDto.getDescription()
+      gameDTO.getAuthor(),
+      gameDTO.getTitle(),
+      gameDTO.getDescription()
     );
 
-    if (!serviceHelper.isOriginal(gameDto.getOriginalGameId())) {
-      Game game = getGame(gameDto.getOriginalGameId());
+    if (!serviceHelper.isOriginal(gameDTO.getOriginalGameId())) {
+      Game game = getGame(gameDTO.getOriginalGameId());
       newGame.getOriginalGames().add(game);
     }
 
@@ -129,7 +129,7 @@ public class GameService {
     GameComponentDTO gameComponent = new GameComponentDTO();
 
     GameDTO gameDto = getGameDTO(gameId);
-    List<ComponentDTO> components = componentService.convertComponentsToComponentDtos(
+    List<ComponentDTO> components = componentServiceHelper.convertComponentsToComponentDTOs(
       componentService.getAllComponentTranslations(componentService.getComponentsByGameId(gameId)));
 
     if (!allLanguages) {

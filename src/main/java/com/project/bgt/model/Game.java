@@ -39,7 +39,6 @@ public class Game {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "language_id")
-  @JsonIgnore
   private Language language;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -47,7 +46,6 @@ public class Game {
   private User user;
 
   @ManyToMany(mappedBy = "originalGames")
-  @JsonIgnore
   List<Game> translatedGames = new ArrayList<Game>();
 
   @ManyToMany
@@ -55,11 +53,9 @@ public class Game {
     name = "game_relationship",
     joinColumns = @JoinColumn(name = "translated_game_id"),
     inverseJoinColumns = @JoinColumn(name = "original_game_id"))
-  @JsonIgnore
   List<Game> originalGames = new ArrayList<Game>();
 
   @ManyToMany(mappedBy = "componentsGame")
-  @JsonIgnore
   List<Component> gameComponents = new ArrayList<Component>();
 
   public Game(){}
