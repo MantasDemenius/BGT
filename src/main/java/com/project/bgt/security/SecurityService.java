@@ -1,8 +1,13 @@
 package com.project.bgt.security;
 
+import com.project.bgt.common.LocationHeader;
+import com.project.bgt.common.constant.PathConst;
+import com.project.bgt.dto.UserDTO;
 import com.project.bgt.model.User;
 import com.project.bgt.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,9 +35,19 @@ public class SecurityService implements UserDetailsService {
     return new Principal(user);
   }
 
-  public User save(User user) {
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    return userRepository.save(user);
+  public ResponseEntity createUser(UserDTO userDTO) {
+    userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
+    User newUser = userRepository.save(new User(
+      userDTO.getUsername(),
+      userDTO.getEmail(),
+      userDTO.getPassword(),
+      userDTO.getUserRole()
+    ));
+
+    return new ResponseEntity(
+      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
+      HttpStatus.CREATED);
   }
 
   public User getCurrentUser() {

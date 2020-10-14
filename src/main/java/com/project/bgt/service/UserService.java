@@ -8,6 +8,7 @@ import com.project.bgt.dto.UserDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.User;
 import com.project.bgt.repository.UserRepository;
+import com.project.bgt.security.SecurityService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+  @Autowired
+  private SecurityService securityService;
   private final UserServiceHelper userServiceHelper = new UserServiceHelper();
   private UserRepository userRepository;
 
@@ -38,19 +41,20 @@ public class UserService {
     return userServiceHelper.convertUserToUserDTO(getUser(userId));
   }
 
-  public ResponseEntity createUser(UserDTO userDTO) {
-    //    ComponentCheck.checkComponents(componentDto);
-    User newUser = userRepository.save(new User(
-      userDTO.getUsername(),
-      userDTO.getEmail(),
-      userDTO.getPassword(),
-      userDTO.getUserRole()
-    ));
-
-    return new ResponseEntity(
-      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
-      HttpStatus.CREATED);
-  }
+//  public ResponseEntity createUser(UserDTO userDTO) {
+//    //    ComponentCheck.checkComponents(componentDto);
+//
+//    User newUser = userRepository.save(new User(
+//      userDTO.getUsername(),
+//      userDTO.getEmail(),
+//      userDTO.getPassword(),
+//      userDTO.getUserRole()
+//    ));
+//
+//    return new ResponseEntity(
+//      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
+//      HttpStatus.CREATED);
+//  }
 
   public ResponseEntity updateUser(UserDTO userDTO, long userId) {
     //    ComponentCheck.checkComponents(newComponentDTO);
