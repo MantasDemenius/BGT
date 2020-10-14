@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(PathConst.LANGUAGE_PATH)
+@RequestMapping(PathConst.PATH + PathConst.LANGUAGE_PATH)
 public class LanguageController {
 
   private final LanguageService languageService;

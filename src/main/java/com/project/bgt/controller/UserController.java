@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(PathConst.USER_PATH)
+@RequestMapping(PathConst.PATH + PathConst.USER_PATH)
 public class UserController {
 
   private final UserService userService;

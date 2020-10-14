@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(PathConst.COMPONENTS_PATH)
+@RequestMapping(PathConst.PATH + PathConst.COMPONENTS_PATH)
 public class ComponentController {
 
   private final ComponentService componentService;
