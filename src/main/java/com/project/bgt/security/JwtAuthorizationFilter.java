@@ -1,32 +1,34 @@
 package com.project.bgt.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
-public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
+public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
   public static final String HEADER = "Authorization";
   public static final String PREFIX = "Bearer ";
   public static final String SECRET = "somesecret";
   public static final int VALIDITY = 60 * 60 * 1000;
 
-  public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
-    super(authenticationManager);
-  }
+  @Autowired
+  private SecurityService securityService;
+
+  @Autowired
+  private TokenProvider tokenProvider;
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -35,17 +37,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     if (requestTokenHeader != null && requestTokenHeader.startsWith(PREFIX)) {
       String jwtToken = requestTokenHeader.substring(PREFIX.length());
-      Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(jwtToken).getBody();
-      String username = claims.getSubject();
-      Date tokenExpirationDate = claims.getExpiration();
+      String username = tokenProvider.getUsernameFromToken(jwtToken);
+//      Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(jwtToken).getBody();
+//      String username = claims.getSubject();
+//      UserDetails userDetails = securityService.loadUserByUsername(username);
+//      Date tokenExpirationDate = claims.getExpiration();
 
-      if (tokenExpirationDate.after(new Date())) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(username, null,
-          new ArrayList<>());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+      if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        UserDetails userDetails = securityService.loadUserByUsername(username);
+
+        if (tokenProvider.validateToken(jwtToken, userDetails)) {
+          UsernamePasswordAuthenticationToken authentication = tokenProvider
+            .getAuthentication(jwtToken, SecurityContextHolder.getContext().getAuthentication(),
+              userDetails);
+          authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+          SecurityContextHolder.getContext().setAuthentication(authentication);
+        }
       }
     }
-
     chain.doFilter(request, response);
   }
 }

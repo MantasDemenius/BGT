@@ -8,6 +8,7 @@ import com.project.bgt.service.UserService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,7 +33,8 @@ public class UserController {
     this.userService = userService;
   }
 
-  @GetMapping(PathConst.SECURED + PathConst.USER_PATH)
+  @PreAuthorize("hasAuthority('BASIC')")
+  @GetMapping(PathConst.USER_PATH)
   public List<UserDTO> getUsers() {
     try {
       return userService.getUsers();
@@ -41,6 +43,7 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping(PathConst.USER_PATH + "/{userId}")
   public UserDTO getUserById(@PathVariable(value = "userId") long userId) {
     return userService.getUserDTO(userId);

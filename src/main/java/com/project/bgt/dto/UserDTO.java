@@ -1,6 +1,6 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.UserRole;
+import com.project.bgt.model.UserRoleName;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,5 @@ public class UserDTO {
   String email;
   @NotNull
   String password;
-  
-  UserRole userRole;
 
 }

@@ -1,29 +1,27 @@
 package com.project.bgt.model;
 
-import com.project.bgt.common.PostgreSQLEnumType;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 
 @Data
 @Entity
 @NoArgsConstructor
-@TypeDef(
-  name = "pgsql_enum",
-  typeClass = PostgreSQLEnumType.class
-)
 @Table(name = "user", schema = "public")
 public class User {
 
@@ -41,10 +39,11 @@ public class User {
   @Column(name = "password")
   private String password;
 
-  @Column(name = "role", columnDefinition = "user_role")
-  @Enumerated(EnumType.STRING)
-  @Type(type = "pgsql_enum")
-  private UserRole role;
+  @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @JoinTable(name = "user_role",
+  joinColumns = @JoinColumn(name = "user_id"),
+  inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles = new HashSet<Role>();
 
   @OneToMany(mappedBy = "user")
   private List<Game> games = new ArrayList<Game>();
@@ -52,10 +51,9 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<Component> components = new ArrayList<Component>();
 
-  public User(String username, String email, String password, UserRole role) {
+  public User(String username, String email, String password) {
     this.username = username;
     this.email = email;
     this.password = password;
-    this.role = role;
   }
 }

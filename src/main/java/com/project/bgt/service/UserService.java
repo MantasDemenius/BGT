@@ -41,20 +41,19 @@ public class UserService {
     return userServiceHelper.convertUserToUserDTO(getUser(userId));
   }
 
-//  public ResponseEntity createUser(UserDTO userDTO) {
-//    //    ComponentCheck.checkComponents(componentDto);
-//
-//    User newUser = userRepository.save(new User(
-//      userDTO.getUsername(),
-//      userDTO.getEmail(),
-//      userDTO.getPassword(),
-//      userDTO.getUserRole()
-//    ));
-//
-//    return new ResponseEntity(
-//      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
-//      HttpStatus.CREATED);
-//  }
+  public ResponseEntity createUser(UserDTO userDTO) {
+    //    ComponentCheck.checkComponents(componentDto);
+
+    User newUser = userRepository.save(new User(
+      userDTO.getUsername(),
+      userDTO.getEmail(),
+      userDTO.getPassword()
+    ));
+
+    return new ResponseEntity(
+      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
+      HttpStatus.CREATED);
+  }
 
   public ResponseEntity updateUser(UserDTO userDTO, long userId) {
     //    ComponentCheck.checkComponents(newComponentDTO);
@@ -63,7 +62,6 @@ public class UserService {
     user.setUsername(userDTO.getUsername());
     user.setEmail(userDTO.getEmail());
     user.setPassword(userDTO.getPassword());
-    user.setRole(userDTO.getUserRole());
 
     userRepository.save(user);
 

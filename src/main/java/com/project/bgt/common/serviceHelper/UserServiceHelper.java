@@ -19,8 +19,7 @@ public class UserServiceHelper {
       user.getId(),
       user.getUsername(),
       user.getEmail(),
-      user.getPassword(),
-      user.getRole()
+      user.getPassword()
     );
   }
 

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public class LocationHeader {
 
@@ -44,5 +45,7 @@ public class LocationHeader {
     }
     return null;
   }
-
+//  URI location = ServletUriComponentsBuilder
+//    .fromCurrentContextPath().path("/api/users/{username}")
+//    .buildAndExpand(result.getUsername()).toUri();
 }
