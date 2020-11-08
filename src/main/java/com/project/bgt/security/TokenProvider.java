@@ -56,6 +56,7 @@ public class TokenProvider implements Serializable {
     final String authorities = authentication.getAuthorities().stream()
       .map(GrantedAuthority::getAuthority)
       .collect(Collectors.joining(","));
+
     return Jwts.builder()
       .setSubject(authentication.getName())
       .claim(AUTHORITIES_KEY, authorities)
@@ -66,10 +67,10 @@ public class TokenProvider implements Serializable {
   }
 
   public Boolean validateToken(String token, UserDetails userDetails) {
-    final String username = getUsernameFromToken(token);
-    return (
-      username.equals(userDetails.getUsername())
-        && !isTokenExpired(token));
+      final String username = getUsernameFromToken(token);
+      return (
+        username.equals(userDetails.getUsername())
+          && !isTokenExpired(token));
   }
 
   UsernamePasswordAuthenticationToken getAuthentication(final String token, final Authentication existingAuth, final UserDetails userDetails) {

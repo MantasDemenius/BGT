@@ -1,16 +1,18 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.Language;
+import com.project.bgt.model.Role;
 import com.sun.istack.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-@AllArgsConstructor
-public class LanguageDto {
+@Getter
+@Setter
+public class UserRoleDTO {
 
   @Id
   @NotNull
@@ -18,9 +20,6 @@ public class LanguageDto {
 
   @NotBlank
   @Size(min = 3, max = 20)
-  String name;
+  private String role;
 
-  @NotBlank
-  @Size(min = 2, max = 5)
-  String code;
 }

@@ -1,7 +1,10 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.UserRoleName;
 import com.sun.istack.NotNull;
+import javax.persistence.Id;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,13 +12,21 @@ import lombok.Data;
 @AllArgsConstructor
 public class UserDTO {
 
+  @Id
+  @NotNull
   long id;
 
-  @NotNull
+  @NotBlank
+  @Size(min = 3, max = 20)
   String username;
-  @NotNull
+
+  @NotBlank
+  @Email()
+  @Size(min = 3, max = 50)
   String email;
-  @NotNull
+
+  @NotBlank
+  @Size(min = 3, max = 50)
   String password;
 
 }

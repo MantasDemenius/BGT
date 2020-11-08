@@ -2,8 +2,6 @@ package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.dto.LoginRequestDTO;
-import com.project.bgt.model.AuthToken;
-import com.project.bgt.security.SecurityService;
 import com.project.bgt.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +33,6 @@ public class AuthenticationController {
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     final String token = tokenProvider.generateToken(authentication);
-    return ResponseEntity.ok(new AuthToken(token));
+    return ResponseEntity.ok(token);
   }
 }

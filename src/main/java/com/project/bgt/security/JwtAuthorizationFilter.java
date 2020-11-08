@@ -38,10 +38,6 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
     if (requestTokenHeader != null && requestTokenHeader.startsWith(PREFIX)) {
       String jwtToken = requestTokenHeader.substring(PREFIX.length());
       String username = tokenProvider.getUsernameFromToken(jwtToken);
-//      Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(jwtToken).getBody();
-//      String username = claims.getSubject();
-//      UserDetails userDetails = securityService.loadUserByUsername(username);
-//      Date tokenExpirationDate = claims.getExpiration();
 
       if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
         UserDetails userDetails = securityService.loadUserByUsername(username);

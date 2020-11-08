@@ -2,10 +2,12 @@ package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.dto.UserDTO;
+import com.project.bgt.dto.UserRoleDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.security.SecurityService;
 import com.project.bgt.service.UserService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,6 +35,7 @@ public class UserController {
     this.userService = userService;
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping(PathConst.USER_PATH)
   public List<UserDTO> getUsers() {
     try {
@@ -42,22 +45,31 @@ public class UserController {
     }
   }
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping(PathConst.USER_PATH + "/{userId}")
   public UserDTO getUserById(@PathVariable(value = "userId") long userId) {
     return userService.getUserDTO(userId);
   }
 
   @PostMapping(PathConst.USER_PATH)
-  public ResponseEntity createUser(@RequestBody UserDTO userDTO) {
+  public ResponseEntity createUser(@Valid @RequestBody UserDTO userDTO) {
     return securityService.createUser(userDTO);
   }
 
-  @PutMapping(PathConst.USER_PATH + PathConst.SECURED + "/{userId}")
+  @PreAuthorize("hasAnyAuthority('BASIC', 'CREATOR', 'ADMIN')")
+  @PutMapping(PathConst.USER_PATH + "/{userId}")
   public ResponseEntity updateUser(@PathVariable(value = "userId") long userId, @RequestBody UserDTO userDTO) {
     return userService.updateUser(userDTO, userId);
   }
 
-  @DeleteMapping(PathConst.USER_PATH + PathConst.SECURED + "/{userId}")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @PutMapping(PathConst.USER_PATH + "/{userId}" + "/role")
+  public ResponseEntity updateUserRole(@PathVariable(value = "userId") long userId, @Valid @RequestBody List<UserRoleDTO> userRoleDTO) {
+    return userService.updateUserRole(userRoleDTO, userId);
+  }
+
+  @PreAuthorize("hasAnyAuthority('BASIC', 'CREATOR', 'ADMIN')")
+  @DeleteMapping(PathConst.USER_PATH + "/{userId}")
   public ResponseEntity deleteUser(@PathVariable(value = "userId") long userId) {
     return userService.deleteUser(userId);
   }
