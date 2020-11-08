@@ -1,6 +1,7 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
+import com.project.bgt.dto.LoginRequestDTO;
 import com.project.bgt.model.AuthToken;
 import com.project.bgt.security.SecurityService;
 import com.project.bgt.security.TokenProvider;
@@ -11,8 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,32 +24,17 @@ public class AuthenticationController {
   private AuthenticationManager authenticationManager;
 
   @Autowired
-  private SecurityService userDetailsService;
-
-  @Autowired
   private TokenProvider tokenProvider;
 
   @PostMapping(value = "/authenticate")
-  public ResponseEntity authenticate(@RequestParam(value = "username") String username,
-    @RequestParam(value = "password") String password) {
+  public ResponseEntity authenticate(@RequestBody LoginRequestDTO loginRequestDTO) {
 
     final Authentication authentication = authenticationManager
-      .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+      .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDTO.getUsername(),
+        loginRequestDTO.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);
     final String token = tokenProvider.generateToken(authentication);
-//    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
     return ResponseEntity.ok(new AuthToken(token));
   }
-
-//  private String generateToken(UserDetails userDetails) {
-////    Map<String, Object> claims = new HashMap<>();
-//    return Jwts.builder()
-////      .setClaims(claims)
-//      .setSubject(userDetails.getUsername())
-//      .setIssuedAt(new Date(System.currentTimeMillis()))
-//      .setExpiration(new Date(System.currentTimeMillis() + JwtAuthorizationFilter.VALIDITY))
-//      .signWith(SignatureAlgorithm.HS512, JwtAuthorizationFilter.SECRET)
-//      .compact();
-//  }
 }

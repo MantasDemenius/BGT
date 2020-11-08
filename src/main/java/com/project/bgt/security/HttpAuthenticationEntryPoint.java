@@ -21,13 +21,15 @@ public class HttpAuthenticationEntryPoint implements AuthenticationEntryPoint {
   @Override
   public void commence(HttpServletRequest request, HttpServletResponse response,
     AuthenticationException ex) throws IOException {
-    ServerError serverError = new ServerError(ex.getMessage(), new ArrayList<>());
+//    ServerError serverError = new ServerError(ex.getMessage(), new ArrayList<>());
+//
+//    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//    response.setContentType("application/json");
+//
+//    PrintWriter writer = response.getWriter();
+//    objectMapper.writeValue(writer, serverError);
+//    writer.flush();
 
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    response.setContentType("application/json");
-
-    PrintWriter writer = response.getWriter();
-    objectMapper.writeValue(writer, serverError);
-    writer.flush();
+    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
   }
 }

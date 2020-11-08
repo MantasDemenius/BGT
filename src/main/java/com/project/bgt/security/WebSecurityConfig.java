@@ -1,9 +1,11 @@
 package com.project.bgt.security;
 
 import com.project.bgt.common.constant.PathConst;
+import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -53,13 +55,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     httpSecurity
       .csrf().disable()
       .authorizeRequests()
-//      .antMatchers(PathConst.PATH + "/*").authenticated()
       .antMatchers(PathConst.PATH + "/authenticate").permitAll()
+      .antMatchers(HttpMethod.GET,
+        PathConst.PATH + PathConst.COMPONENTS_PATH + "/**",
+        PathConst.PATH + PathConst.GAME_PATH + "/**",
+        PathConst.PATH + PathConst.LANGUAGE_PATH + "/**").permitAll()
+      .antMatchers(HttpMethod.POST, PathConst.PATH + PathConst.USER_PATH).permitAll()
       .anyRequest().authenticated()
       .and()
       .exceptionHandling().authenticationEntryPoint(httpAuthenticationEntryPoint)
       .and()
-//      .addFilter(new JwtAuthorizationFilter(authenticationManagerBean()))
       .sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

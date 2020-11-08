@@ -33,7 +33,6 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PreAuthorize("hasAuthority('BASIC')")
   @GetMapping(PathConst.USER_PATH)
   public List<UserDTO> getUsers() {
     try {
@@ -43,7 +42,6 @@ public class UserController {
     }
   }
 
-  @PreAuthorize("hasAuthority('ADMIN')")
   @GetMapping(PathConst.USER_PATH + "/{userId}")
   public UserDTO getUserById(@PathVariable(value = "userId") long userId) {
     return userService.getUserDTO(userId);
