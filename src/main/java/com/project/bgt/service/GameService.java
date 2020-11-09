@@ -61,7 +61,6 @@ public class GameService {
 
   @Transactional
   public ResponseEntity createGame(GameDTO gameDTO) {
-//    ComponentCheck.checkComponents(gameDto);
     Language language = languageService.getLanguage(gameDTO.getLanguageId());
     User user = userService.getUser(gameDTO.getUserId());
     ServiceHelper serviceHelper = new ServiceHelper();
@@ -112,13 +111,13 @@ public class GameService {
     } catch (DataIntegrityViolationException ex) {
       throw new BadRequestException("This game has translated games");
     } catch (Exception ex) {
-      throw new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID);
+      throw new RecordNotFoundException("Game with id: " + gameId + " was not found!");
     }
   }
 
   public Game getGame(long gameId) {
     return gameRepository.findById(gameId)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.GAME_NOT_FOUND_ID));
+      .orElseThrow(() -> new RecordNotFoundException("Game with id: " + gameId + " was not found!"));
   }
 
   public GameDTO getGameDTO(long gameId) {

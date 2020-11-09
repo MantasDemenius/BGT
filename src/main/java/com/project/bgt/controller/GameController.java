@@ -43,7 +43,7 @@ public class GameController {
   }
 
   @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
-  @PostMapping("")
+  @PostMapping
   public ResponseEntity createGame(@RequestBody GameDTO gameDto) {
     return gameService.createGame(gameDto);
   }

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +30,9 @@ public class UserService {
   private final UserServiceHelper userServiceHelper = new UserServiceHelper();
   private UserRepository userRepository;
   private RoleRepository roleRepository;
+
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
   public void setUserRepository(UserRepository userRepository) {
@@ -46,7 +50,7 @@ public class UserService {
 
   public User getUser(long userId) {
     return userRepository.findById(userId)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.USER_NOT_FOUND));
+      .orElseThrow(() -> new RecordNotFoundException("User with id: " + userId + " was not found!"));
   }
 
   public UserDTO getUserDTO(long userId) {
@@ -54,12 +58,11 @@ public class UserService {
   }
 
   public ResponseEntity updateUser(UserDTO userDTO, long userId) {
-    //    ComponentCheck.checkComponents(newComponentDTO);
     User user = getUser(userId);
 
     user.setUsername(userDTO.getUsername());
     user.setEmail(userDTO.getEmail());
-    user.setPassword(userDTO.getPassword());
+    user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
     userRepository.save(user);
 
