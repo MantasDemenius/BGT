@@ -50,7 +50,7 @@ public class LanguageController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @PutMapping("{languageId}")
   public ResponseEntity updateLanguage(@PathVariable(value = "languageId") long languageId,
-    @RequestBody LanguageDto languageDto) {
+    @Valid @RequestBody LanguageDto languageDto) {
     return languageService.updateLanguage(languageDto, languageId);
   }
 

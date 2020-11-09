@@ -88,8 +88,6 @@ public class GameService {
 
   //Only update Author, Description, Title, Language, All the fields are required
   public ResponseEntity updateGame(GameDTO newGameDTO, long gameId) {
-//    ComponentCheck.checkComponents(newGameDto);
-
     Language language = languageService.getLanguage(newGameDTO.getLanguageId());
     Game game = getGame(gameId);
 

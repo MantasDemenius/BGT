@@ -6,6 +6,7 @@ import com.project.bgt.dto.GameDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.GameService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,14 +45,14 @@ public class GameController {
 
   @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
   @PostMapping
-  public ResponseEntity createGame(@RequestBody GameDTO gameDto) {
+  public ResponseEntity createGame(@Valid @RequestBody GameDTO gameDto) {
     return gameService.createGame(gameDto);
   }
 
   @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
   @PutMapping("/{gameId}")
   public ResponseEntity updateGame(@PathVariable(value = "gameId") long gameId,
-    @RequestBody GameDTO gameDto) {
+    @Valid @RequestBody GameDTO gameDto) {
     return gameService.updateGame(gameDto, gameId);
   }
 

@@ -5,6 +5,7 @@ import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.ComponentService;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,13 +43,13 @@ public class ComponentController {
 
   @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
   @PostMapping("")
-  public ResponseEntity createComponent(@RequestBody ComponentDTO componentDto) {
+  public ResponseEntity createComponent(@Valid @RequestBody ComponentDTO componentDto) {
     return componentService.createComponent(componentDto);
   }
 
   @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
   @PutMapping("/{componentId}")
-  public ResponseEntity updateComponent(@PathVariable(value = "componentId") long componentId, @RequestBody ComponentDTO componentDto) {
+  public ResponseEntity updateComponent(@PathVariable(value = "componentId") long componentId, @Valid @RequestBody ComponentDTO componentDto) {
     return componentService.updateComponent(componentDto, componentId);
   }
 

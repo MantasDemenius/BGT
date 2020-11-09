@@ -81,7 +81,6 @@ public class ComponentService {
   @Transactional
   public ResponseEntity createComponent(ComponentDTO componentDTO) {
 //    ComponentCheck.checkComponents(componentDto);
-
     ServiceHelper serviceHelper = new ServiceHelper();
 
     Language language = languageService.getLanguage(componentDTO.getLanguageId());
@@ -133,9 +132,9 @@ public class ComponentService {
     }
   }
 
-  public Component getComponent(long ComponentId) {
-    return componentRepository.findById(ComponentId)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.COMPONENT_NOT_FOUND_ID));
+  public Component getComponent(long componentId) {
+    return componentRepository.findById(componentId)
+      .orElseThrow(() -> new RecordNotFoundException("Component with id: " + componentId + " was not found!"));
   }
 
   public ComponentDTO getComponentDTO(long ComponentId) {

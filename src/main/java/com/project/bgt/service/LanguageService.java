@@ -39,7 +39,7 @@ public class LanguageService {
 
   public Language getLanguage(long languageId) {
     return languageRepository.findById(languageId)
-      .orElseThrow(() -> new RecordNotFoundException(ErrorMessages.LANGUAGE_NOT_FOUND_ID));
+      .orElseThrow(() -> new RecordNotFoundException("Language with id: " + languageId + " was not found!"));
   }
 
   public LanguageDto getLanguageDto(long languageId) {

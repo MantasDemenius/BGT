@@ -6,13 +6,19 @@ import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.common.serviceHelper.UserServiceHelper;
 import com.project.bgt.dto.UserDTO;
 import com.project.bgt.dto.UserRoleDTO;
+import com.project.bgt.exception.EmailAlreadyExistsException;
 import com.project.bgt.exception.RecordNotFoundException;
+import com.project.bgt.exception.ResponseEntityBuilder;
+import com.project.bgt.exception.UsernameAlreadyExistsException;
+import com.project.bgt.model.ApiError;
 import com.project.bgt.model.Role;
 import com.project.bgt.model.User;
 import com.project.bgt.model.UserRoleName;
 import com.project.bgt.repository.RoleRepository;
 import com.project.bgt.repository.UserRepository;
 import com.project.bgt.security.SecurityService;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,6 +64,8 @@ public class UserService {
   }
 
   public ResponseEntity updateUser(UserDTO userDTO, long userId) {
+    userExistsByUsername(userDTO.getUsername());
+    userExistsByEmail(userDTO.getEmail());
     User user = getUser(userId);
 
     user.setUsername(userDTO.getUsername());
@@ -65,7 +73,6 @@ public class UserService {
     user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
     userRepository.save(user);
-
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
@@ -74,7 +81,7 @@ public class UserService {
       userRepository.deleteById(userId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception ex) {
-      throw new RecordNotFoundException(ErrorMessages.USER_NOT_FOUND);
+      throw new RecordNotFoundException("User with id: " + userId + " was not found!");
     }
   }
 
@@ -88,5 +95,17 @@ public class UserService {
 
     userRepository.save(user);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  public void userExistsByUsername(String username) {
+    if (userRepository.existsByUsername(username)) {
+      throw new UsernameAlreadyExistsException("Username: " + username + " is already taken!");
+    }
+  }
+
+  public void userExistsByEmail(String email) {
+    if (userRepository.existsByEmail(email)) {
+      throw new EmailAlreadyExistsException("Email: " + email + " is already taken!");
+    }
   }
 }

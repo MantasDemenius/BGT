@@ -58,7 +58,7 @@ public class UserController {
 
   @PreAuthorize("hasAnyAuthority('BASIC', 'CREATOR', 'ADMIN')")
   @PutMapping(PathConst.USER_PATH + "/{userId}")
-  public ResponseEntity updateUser(@PathVariable(value = "userId") long userId, @RequestBody UserDTO userDTO) {
+  public ResponseEntity updateUser(@PathVariable(value = "userId") long userId, @Valid @RequestBody UserDTO userDTO) {
     return userService.updateUser(userDTO, userId);
   }
 

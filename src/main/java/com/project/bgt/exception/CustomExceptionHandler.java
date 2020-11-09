@@ -36,6 +36,38 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     return ResponseEntityBuilder.build(err);
   }
 
+  @ExceptionHandler(UsernameAlreadyExistsException.class)
+  public final ResponseEntity<Object> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
+    WebRequest request) {
+    List<String> errors = new ArrayList<String>();
+
+    errors.add(ex.getMessage());
+
+    ApiError err = new ApiError(
+      LocalDateTime.now(),
+      HttpStatus.BAD_REQUEST,
+      errors
+    );
+
+    return ResponseEntityBuilder.build(err);
+  }
+
+  @ExceptionHandler(EmailAlreadyExistsException.class)
+  public final ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,
+    WebRequest request) {
+    List<String> errors = new ArrayList<String>();
+
+    errors.add(ex.getMessage());
+
+    ApiError err = new ApiError(
+      LocalDateTime.now(),
+      HttpStatus.BAD_REQUEST,
+      errors
+    );
+
+    return ResponseEntityBuilder.build(err);
+  }
+
   @Override
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
     MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status,
