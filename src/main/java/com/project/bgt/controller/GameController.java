@@ -29,7 +29,7 @@ public class GameController {
     this.gameService = gameService;
   }
 
-  @GetMapping("")
+  @GetMapping
   public List<GameDTO> getGames() {
     try {
       return gameService.getGames();
@@ -63,12 +63,14 @@ public class GameController {
   }
 
   @GetMapping("/{gameId}" + PathConst.COMPONENTS_PATH)
-  public GameComponentDTO getGameComponents(@PathVariable(value = "gameId") long gameId,
-    @RequestParam(name = "allLanguages") Boolean allLanguages) {
-    return gameService.getGameComponents(gameId, allLanguages);
+  public GameComponentDTO getGameComponents(@PathVariable(value = "gameId") long gameId) {
+    return gameService.getGameComponents(gameId);
   }
 
-  //get all games by language
+  /**
+   * @deprecated use getGameComponents
+   */
+  @Deprecated()
   @GetMapping(PathConst.COMPONENTS_PATH + PathConst.LANGUAGE_PATH + "/{languageId}")
   public List<GameComponentDTO> getAllGamesWithComponentsByLanguageId(
     @PathVariable(value = "languageId") long languageId) {
@@ -78,6 +80,11 @@ public class GameController {
   @GetMapping("/original")
   public List<GameDTO> getOriginalGames(){
     return gameService.getOriginalGames();
+  }
+
+  @GetMapping("/{gameId}" + PathConst.LANGUAGE_PATH)
+  public List<String> getGameLanguages(@PathVariable(value = "gameId") long gameId){
+    return gameService.getGameLanguages(gameId);
   }
 }
 

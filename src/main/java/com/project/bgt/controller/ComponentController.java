@@ -58,9 +58,4 @@ public class ComponentController {
   public ResponseEntity deleteComponent(@PathVariable(value = "componentId") long componentId) {
     return componentService.deleteComponent(componentId);
   }
-
-  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
-  public List<ComponentDTO> getComponentsByGameId(@PathVariable(value = "gameId") long gameId){
-    return componentService.getComponentDTOsByGameId(gameId);
-  }
 }

@@ -96,8 +96,4 @@ public class LanguageService {
       language.getCode()
     );
   }
-
-  public List<String> getGameLanguages(long gameId) {
-    return languageRepository.findAllGameLanguages(gameId);
-  }
 }

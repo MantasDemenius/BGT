@@ -10,7 +10,9 @@ import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.dto.GameComponentDTO;
 import com.project.bgt.dto.GameDTO;
 import com.project.bgt.exception.BadRequestException;
+import com.project.bgt.exception.EmailAlreadyExistsException;
 import com.project.bgt.exception.RecordNotFoundException;
+import com.project.bgt.exception.ResponseEntityBuilder;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.model.User;
@@ -23,6 +25,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 @Service
 public class GameService {
@@ -122,17 +125,12 @@ public class GameService {
     return gameServiceHelper.convertGameToGameDTO(getGame(gameId));
   }
 
-  public GameComponentDTO getGameComponents(long gameId, Boolean allLanguages) {
+  public GameComponentDTO getGameComponents(long gameId) {
     GameComponentDTO gameComponent = new GameComponentDTO();
 
     GameDTO gameDto = getGameDTO(gameId);
     List<ComponentDTO> components = componentServiceHelper.convertComponentsToComponentDTOs(
       componentService.getAllComponentTranslations(componentService.getComponentsByGameId(gameId)));
-
-    if (!allLanguages) {
-      components = componentServiceHelper
-        .filterComponentDTOByLanguageId(components, gameDto.getLanguageId());
-    }
 
     gameComponent.setGame(gameDto);
     gameComponent.setComponents(components);
@@ -162,6 +160,13 @@ public class GameService {
 
   public List<GameDTO> getOriginalGames() {
     return gameServiceHelper.convertGamesToGameDTOs(gameRepository.findAllOriginalGames());
+  }
+
+  public List<String> getGameLanguages(long gameId) {
+    if(!gameRepository.existsById(gameId)){
+      throw new RecordNotFoundException("Game with id: " + gameId + " does not exist!");
+    }
+    return gameRepository.findAllGameLanguages(gameId);
   }
 }
 

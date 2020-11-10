@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
@@ -35,6 +36,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     return ResponseEntityBuilder.build(err);
   }
+
 
   @ExceptionHandler(UsernameAlreadyExistsException.class)
   public final ResponseEntity<Object> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
@@ -121,6 +123,21 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     return ResponseEntityBuilder.build(err);
   }
+
+  @ExceptionHandler(AccessDeniedException.class)
+  public final ResponseEntity<Object> handleAccessDeniedException(AccessDeniedException ex,
+    WebRequest request) {
+    List<String> errors = new ArrayList<String>();
+    errors.add(ex.getMessage());
+
+    ApiError err = new ApiError(
+      LocalDateTime.now(),
+      HttpStatus.FORBIDDEN,
+      errors
+    );
+    return ResponseEntityBuilder.build(err);
+  }
+
 //
 //  @ExceptionHandler(BadRequestException.class)
 //  public final ResponseEntity<ApiError> handleBadRequestException(BadRequestException ex,

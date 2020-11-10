@@ -1,6 +1,7 @@
 package com.project.bgt.security;
 
 import com.project.bgt.common.constant.PathConst;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

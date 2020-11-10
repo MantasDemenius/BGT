@@ -59,9 +59,4 @@ public class LanguageController {
   public ResponseEntity deleteLanguage(@PathVariable(value = "languageId") long languageId) {
     return languageService.deleteLanguage(languageId);
   }
-
-  @GetMapping(PathConst.GAME_PATH + "/{gameId}")
-  public List<String> getGameLanguages(@PathVariable(value = "gameId") long gameId){
-    return languageService.getGameLanguages(gameId);
-  }
 }
