@@ -14,6 +14,7 @@ public class GameServiceHelper {
   }
 
   public GameDTO convertGameToGameDTO(Game game) {
+    if(game == null ) return null;
     return new GameDTO(
       game.getId(),
       game.getLanguage().getId(),

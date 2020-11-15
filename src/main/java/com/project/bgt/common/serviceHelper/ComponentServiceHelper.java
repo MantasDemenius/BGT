@@ -15,6 +15,8 @@ public class ComponentServiceHelper {
   }
 
   public ComponentDTO convertComponentToComponentDTO(Component component) {
+    if(component == null) return null;
+
     return new ComponentDTO(
       component.getId(),
       component.getLanguage().getId(),

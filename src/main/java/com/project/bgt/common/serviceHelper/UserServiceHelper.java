@@ -25,6 +25,7 @@ public class UserServiceHelper {
   }
 
   public UserDTO convertUserToUserDTO(User user) {
+    if(user == null ) return null;
     return new UserDTO(
       user.getId(),
       user.getUsername(),

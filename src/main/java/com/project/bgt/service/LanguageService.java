@@ -1,7 +1,6 @@
 package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
-import com.project.bgt.common.check.LanguageCheck;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.dto.LanguageDto;
@@ -47,7 +46,6 @@ public class LanguageService {
   }
 
   public ResponseEntity createLanguage(LanguageDto languageDto) {
-    LanguageCheck.checkLanguage(languageDto);
 
     Language newLanguage = new Language(
       languageDto.getName(),
@@ -63,7 +61,6 @@ public class LanguageService {
 
 
   public ResponseEntity updateLanguage(LanguageDto newLanguageDto, long languageId) {
-    LanguageCheck.checkLanguage(newLanguageDto);
     Language language = getLanguage(languageId);
 
     language.setName(newLanguageDto.getName());
