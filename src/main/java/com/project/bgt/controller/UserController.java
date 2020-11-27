@@ -53,7 +53,7 @@ public class UserController {
 
   @PostMapping(PathConst.USER_PATH)
   public ResponseEntity createUser(@Valid @RequestBody UserDTO userDTO) {
-    return securityService.createUser(userDTO);
+    return userService.createUser(userDTO);
   }
 
   @PreAuthorize("hasAnyAuthority('BASIC', 'CREATOR', 'ADMIN')")

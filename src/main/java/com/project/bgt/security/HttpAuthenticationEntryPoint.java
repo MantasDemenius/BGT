@@ -1,10 +1,7 @@
 package com.project.bgt.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.bgt.exception.ServerError;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

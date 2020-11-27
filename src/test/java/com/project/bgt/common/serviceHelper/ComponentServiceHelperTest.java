@@ -22,7 +22,7 @@ class ComponentServiceHelperTest {
   }
 
   @Test
-  void convertComponentsToComponentDTOs_SimpleComponentList_ConvertedToListDTO() {
+  void convertComponentsToComponentDTOs_ComponentsList_ComponentDTOsList() {
     // Setup
     final List<Component> Components = List.of(
       new Component(new Language("name", "code"), new User("username", "email", "password"),
@@ -39,20 +39,7 @@ class ComponentServiceHelperTest {
   }
 
   @Test
-  void convertComponentsToComponentDTOs_NullList_DTONullList() {
-    // Setup
-    final List<Component> Components = List.of();
-    final List<ComponentDTO> expectedResult = List.of();
-    // Run the test
-    final List<ComponentDTO> result = componentServiceHelperUnderTest
-      .convertComponentsToComponentDTOs(Components);
-
-    // Verify the results
-    assertThat(result).isEqualTo(expectedResult);
-  }
-
-  @Test
-  void convertComponentToComponentDTO_SimpleComponent_ConvertedToDTO() {
+  void convertComponentToComponentDTO_Component_ComponentDTO() {
     // Setup
     final Component component = new Component(new Language("name", "code"),
       new User("username", "email", "password"), new Game(), "title", "description",
@@ -69,10 +56,18 @@ class ComponentServiceHelperTest {
   }
 
   @Test
-  void convertComponentToComponentDTO_Null_Null() {
+  void convertComponentToComponentDTO_ComponentWithOriginal_ComponentDTO() {
     // Setup
-    final Component component = null;
-    final ComponentDTO expectedResult = null;
+    final Component component = new Component(new Language("name", "code"),
+      new User("username", "email", "password"), new Game(), "title", "description",
+      ComponentCategory.RULES);
+    List<Component> originalComponents = List.of(new Component(new Language("name", "code"),
+      new User("username", "email", "password"), new Game(), "title", "description",
+      ComponentCategory.RULES));
+    originalComponents.get(0).setId(1L);
+    component.setOriginalComponents(originalComponents);
+    final ComponentDTO expectedResult = new ComponentDTO(0L, 0L, 0L, 0L, 1L, "title", "description",
+      ComponentCategory.RULES);
 
     // Run the test
     final ComponentDTO result = componentServiceHelperUnderTest
@@ -83,47 +78,24 @@ class ComponentServiceHelperTest {
   }
 
   @Test
-  void filterComponentDTOByLanguageId_TwoUniqueLanguages_ReturnsGivenLanguagesById() {
+  void convertComponentToComponentDTO_null_null() {
+    // Setup
+
+    // Run the test
+    final ComponentDTO result = componentServiceHelperUnderTest
+      .convertComponentToComponentDTO(null);
+
+    // Verify the results
+    assertThat(result).isEqualTo(null);
+  }
+
+  @Test
+  void filterComponentDTOByLanguageId_ComponentsList_FilteredComponentsList() {
     // Setup
     final List<ComponentDTO> components = List
-      .of(new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES)
-        , new ComponentDTO(0L, 1L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
+      .of(new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
     final List<ComponentDTO> expectedResult = List
       .of(new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
-
-    // Run the test
-    final List<ComponentDTO> result = componentServiceHelperUnderTest
-      .filterComponentDTOByLanguageId(components, 0L);
-
-    // Verify the results
-    assertThat(result).isEqualTo(expectedResult);
-  }
-
-  @Test
-  void filterComponentDTOByLanguageId_ComponentsThatDontMatchGivenId_EmptyList() {
-    // Setup
-    final List<ComponentDTO> components = List
-      .of(new ComponentDTO(0L, 1L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES)
-        , new ComponentDTO(0L, 1L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
-    final List<ComponentDTO> expectedResult = List.of();
-
-    // Run the test
-    final List<ComponentDTO> result = componentServiceHelperUnderTest
-      .filterComponentDTOByLanguageId(components, 0L);
-
-    // Verify the results
-    assertThat(result).isEqualTo(expectedResult);
-  }
-
-  @Test
-  void filterComponentDTOByLanguageId_TwoWithSameLanguages_ReturnsAllComponents() {
-    // Setup
-    final List<ComponentDTO> components = List
-      .of(new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES)
-        , new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
-    final List<ComponentDTO> expectedResult = List
-      .of(new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES)
-        , new ComponentDTO(0L, 0L, 0L, 0L, 0L, "title", "description", ComponentCategory.RULES));
 
     // Run the test
     final List<ComponentDTO> result = componentServiceHelperUnderTest

@@ -81,12 +81,4 @@ public class Component {
     this.description = description;
     this.category = category;
   }
-
-//  public Component(Language language, User user, Game game, String title, String description) {
-//    this.language = language;
-//    this.user = user;
-//    this.componentsGame.add(game);
-//    this.title = title;
-//    this.description = description;
-//  }
 }

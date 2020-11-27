@@ -51,9 +51,12 @@ public class ComponentService {
     this.componentRepository = componentRepository;
   }
 
+  public List<Component> getComponents() {
+    return componentRepository.findAll();
+  }
 
-  public List<ComponentDTO> getComponents() {
-    return componentServiceHelper.convertComponentsToComponentDTOs(componentRepository.findAll());
+  public List<ComponentDTO> getComponentsDTO() {
+    return componentServiceHelper.convertComponentsToComponentDTOs(getComponents());
   }
 
   public List<Component> getComponentsByGameId(long gameId) {
@@ -80,7 +83,6 @@ public class ComponentService {
 
   @Transactional
   public ResponseEntity createComponent(ComponentDTO componentDTO) {
-//    ComponentCheck.checkComponents(componentDto);
     ServiceHelper serviceHelper = new ServiceHelper();
 
     Language language = languageService.getLanguage(componentDTO.getLanguageId());
@@ -121,14 +123,14 @@ public class ComponentService {
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  public ResponseEntity deleteComponent(long ComponentId) {
+  public ResponseEntity deleteComponent(long componentId) {
     try {
-      componentRepository.deleteById(ComponentId);
+      componentRepository.deleteById(componentId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (DataIntegrityViolationException ex) {
       throw new BadRequestException("This component has translated games");
     } catch (Exception ex) {
-      throw new RecordNotFoundException(ErrorMessages.COMPONENT_NOT_FOUND_ID);
+      throw new RecordNotFoundException("Component with id: " + componentId + " was not found!");
     }
   }
 
@@ -141,5 +143,9 @@ public class ComponentService {
     return componentServiceHelper.convertComponentToComponentDTO(getComponent(ComponentId));
   }
 
+  public List<ComponentDTO> getAllComponentTranslationsDTOByGameId(long gameId){
+    return componentServiceHelper.convertComponentsToComponentDTOs(
+      getAllComponentTranslations(getComponentsByGameId(gameId)));
+  }
 
 }

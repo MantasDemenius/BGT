@@ -3,10 +3,9 @@ package com.project.bgt.service;
 import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.dto.LanguageDto;
+import com.project.bgt.dto.LanguageDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.model.Language;
-import com.project.bgt.repository.ComponentRepository;
 import com.project.bgt.repository.LanguageRepository;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +17,9 @@ import org.springframework.stereotype.Service;
 public class LanguageService {
 
   private final LanguageRepository languageRepository;
-  private final ComponentRepository componentRepository;
 
-  public LanguageService(LanguageRepository languageRepository, ComponentRepository componentRepository) {
+  public LanguageService(LanguageRepository languageRepository) {
     this.languageRepository = languageRepository;
-    this.componentRepository = componentRepository;
   }
 //  public Language findLanguageByCode(String languageCode) {
 //
@@ -32,8 +29,8 @@ public class LanguageService {
 //    return language;
 //  }
 
-  public List<LanguageDto> getLanguages() {
-    return convertLanguagesToLanguageDtos(languageRepository.findAll());
+  public List<LanguageDTO> getLanguages() {
+    return convertLanguagesToLanguageDTOs(languageRepository.findAll());
   }
 
   public Language getLanguage(long languageId) {
@@ -41,11 +38,11 @@ public class LanguageService {
       .orElseThrow(() -> new RecordNotFoundException("Language with id: " + languageId + " was not found!"));
   }
 
-  public LanguageDto getLanguageDto(long languageId) {
-    return convertLanguageToLanguageDto(getLanguage(languageId));
+  public LanguageDTO getLanguageDTO(long languageId) {
+    return convertLanguageToLanguageDTO(getLanguage(languageId));
   }
 
-  public ResponseEntity createLanguage(LanguageDto languageDto) {
+  public ResponseEntity createLanguage(LanguageDTO languageDto) {
 
     Language newLanguage = new Language(
       languageDto.getName(),
@@ -60,11 +57,11 @@ public class LanguageService {
   }
 
 
-  public ResponseEntity updateLanguage(LanguageDto newLanguageDto, long languageId) {
+  public ResponseEntity updateLanguage(LanguageDTO newLanguageDTO, long languageId) {
     Language language = getLanguage(languageId);
 
-    language.setName(newLanguageDto.getName());
-    language.setCode(newLanguageDto.getCode());
+    language.setName(newLanguageDTO.getName());
+    language.setCode(newLanguageDTO.getCode());
 
     languageRepository.save(language);
 
@@ -76,18 +73,18 @@ public class LanguageService {
       languageRepository.deleteById(languageId);
       return new ResponseEntity<>(HttpStatus.OK);
     } catch (Exception ex) {
-      throw new RecordNotFoundException(ErrorMessages.LANGUAGE_NOT_FOUND_ID);
+      throw new RecordNotFoundException("Language with id: " + languageId + " was not found!");
     }
   }
 
-  private List<LanguageDto> convertLanguagesToLanguageDtos(List<Language> languages) {
+  private List<LanguageDTO> convertLanguagesToLanguageDTOs(List<Language> languages) {
     return languages.stream()
-      .map(this::convertLanguageToLanguageDto)
+      .map(this::convertLanguageToLanguageDTO)
       .collect(Collectors.toList());
   }
 
-  private LanguageDto convertLanguageToLanguageDto(Language language) {
-    return new LanguageDto(
+  private LanguageDTO convertLanguageToLanguageDTO(Language language) {
+    return new LanguageDTO(
       language.getId(),
       language.getName(),
       language.getCode()

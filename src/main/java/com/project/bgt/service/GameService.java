@@ -13,6 +13,7 @@ import com.project.bgt.exception.BadRequestException;
 import com.project.bgt.exception.EmailAlreadyExistsException;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.exception.ResponseEntityBuilder;
+import com.project.bgt.exception.UsernameAlreadyExistsException;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.model.User;
@@ -31,7 +32,6 @@ import org.springframework.web.client.HttpClientErrorException.NotFound;
 public class GameService {
 
   private final GameServiceHelper gameServiceHelper = new GameServiceHelper();
-  private final ComponentServiceHelper componentServiceHelper = new ComponentServiceHelper();
   private LanguageService languageService;
   private ComponentService componentService;
   private UserService userService;
@@ -129,8 +129,7 @@ public class GameService {
     GameComponentDTO gameComponent = new GameComponentDTO();
 
     GameDTO gameDto = getGameDTO(gameId);
-    List<ComponentDTO> components = componentServiceHelper.convertComponentsToComponentDTOs(
-      componentService.getAllComponentTranslations(componentService.getComponentsByGameId(gameId)));
+    List<ComponentDTO> components = componentService.getAllComponentTranslationsDTOByGameId(gameId);
 
     gameComponent.setGame(gameDto);
     gameComponent.setComponents(components);
@@ -149,9 +148,9 @@ public class GameService {
     for (Game game : games) {
       GameComponentDTO gameComponent = new GameComponentDTO();
 
-      List<ComponentDTO> cards = componentService.getComponentDTOsByGameId(game.getId());
+      List<ComponentDTO> components = componentService.getComponentDTOsByGameId(game.getId());
       gameComponent.setGame(gameServiceHelper.convertGameToGameDTO(game));
-      gameComponent.setComponents(cards);
+      gameComponent.setComponents(components);
 
       gameComponents.add(gameComponent);
     }
@@ -163,10 +162,14 @@ public class GameService {
   }
 
   public List<String> getGameLanguages(long gameId) {
-    if(!gameRepository.existsById(gameId)){
-      throw new RecordNotFoundException("Game with id: " + gameId + " does not exist!");
-    }
+    gameDoesNotExistById(gameId);
     return gameRepository.findAllGameLanguages(gameId);
+  }
+
+  public void gameDoesNotExistById(long gameId) {
+    if(!gameRepository.existsById(gameId)){
+      throw new RecordNotFoundException("Game with id: " + gameId + " was not found!");
+    }
   }
 }
 

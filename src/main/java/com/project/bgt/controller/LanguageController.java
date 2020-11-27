@@ -1,12 +1,11 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
-import com.project.bgt.dto.LanguageDto;
+import com.project.bgt.dto.LanguageDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.LanguageService;
 import java.util.List;
 import javax.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +28,7 @@ public class LanguageController {
   }
 
   @GetMapping("")
-  public List<LanguageDto> getLanguages() {
+  public List<LanguageDTO> getLanguages() {
     try {
       return languageService.getLanguages();
     } catch (Exception ex) {
@@ -38,20 +37,20 @@ public class LanguageController {
   }
 
   @GetMapping("{languageId}")
-  public LanguageDto getLanguage(@PathVariable(value = "languageId") long languageId) {
-    return languageService.getLanguageDto(languageId);
+  public LanguageDTO getLanguage(@PathVariable(value = "languageId") long languageId) {
+    return languageService.getLanguageDTO(languageId);
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @PostMapping("")
-  public ResponseEntity createLanguage(@Valid @RequestBody LanguageDto languageDto) {
+  public ResponseEntity createLanguage(@Valid @RequestBody LanguageDTO languageDto) {
     return languageService.createLanguage(languageDto);
   }
 
   @PreAuthorize("hasAuthority('ADMIN')")
   @PutMapping("{languageId}")
   public ResponseEntity updateLanguage(@PathVariable(value = "languageId") long languageId,
-    @Valid @RequestBody LanguageDto languageDto) {
+    @Valid @RequestBody LanguageDTO languageDto) {
     return languageService.updateLanguage(languageDto, languageId);
   }
 

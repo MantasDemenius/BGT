@@ -30,7 +30,7 @@ public class ComponentController {
   @GetMapping("")
   public List<ComponentDTO> getComponents() {
     try {
-      return componentService.getComponents();
+      return componentService.getComponentsDTO();
     } catch (Exception ex) {
       throw new RecordNotFoundException();
     }

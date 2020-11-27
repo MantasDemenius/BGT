@@ -35,6 +35,7 @@ public class UserService {
   private SecurityService securityService;
   private final UserServiceHelper userServiceHelper = new UserServiceHelper();
   private UserRepository userRepository;
+  @Autowired
   private RoleRepository roleRepository;
 
   @Autowired
@@ -43,11 +44,6 @@ public class UserService {
   @Autowired
   public void setUserRepository(UserRepository userRepository) {
     this.userRepository = userRepository;
-  }
-
-  @Autowired
-  public void setRoleRepository(RoleRepository roleRepository){
-    this.roleRepository = roleRepository;
   }
 
   public List<UserDTO> getUsers() {
@@ -61,6 +57,29 @@ public class UserService {
 
   public UserDTO getUserDTO(long userId) {
     return userServiceHelper.convertUserToUserDTO(getUser(userId));
+  }
+
+  public ResponseEntity createUser(UserDTO userDTO) {
+    userExistsByUsername(userDTO.getUsername());
+    userExistsByEmail(userDTO.getEmail());
+
+    User user = new User(
+      userDTO.getUsername(),
+      userDTO.getEmail(),
+      passwordEncoder.encode(userDTO.getPassword())
+    );
+    user.setRoles(Collections.singleton(getUserRole(UserRoleName.BASIC)));
+
+    User newUser = userRepository.save(user);
+
+    return new ResponseEntity(
+      LocationHeader.getLocationHeaders(PathConst.USER_PATH, newUser.getId()),
+      HttpStatus.CREATED);
+  }
+
+  public Role getUserRole(UserRoleName userRole) {
+    return roleRepository.findByName(userRole)
+        .orElseThrow(() -> new RecordNotFoundException("Role: " + userRole + " was not found!"));
   }
 
   public ResponseEntity updateUser(UserDTO userDTO, long userId) {
@@ -87,7 +106,6 @@ public class UserService {
 
   public ResponseEntity updateUserRole(List<UserRoleDTO> userRoleDTOS, long userId) {
     User user = getUser(userId);
-
 
     user.setRoles(userRoleDTOS.stream().map(
       role -> new Role(role.getId(), role.getRole()))

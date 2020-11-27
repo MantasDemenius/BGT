@@ -1,6 +1,5 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.Language;
 import com.sun.istack.NotNull;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class LanguageDto {
+public class LanguageDTO {
 
   @Id
   @NotNull
