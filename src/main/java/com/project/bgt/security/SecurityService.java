@@ -38,8 +38,8 @@ public class SecurityService implements UserDetailsService {
 
     return authorities;
   }
-//  public User getCurrentUser() {
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    return userRepository.findByUsername((String) authentication.getPrincipal());
-//  }
+  public User getCurrentUser() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    return userService.getUserByUsername((String) authentication.getPrincipal());
+  }
 }
