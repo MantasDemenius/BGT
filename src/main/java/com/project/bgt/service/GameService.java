@@ -2,22 +2,19 @@ package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.constant.PathConst;
-import com.project.bgt.common.message.ErrorMessages;
-import com.project.bgt.common.serviceHelper.ComponentServiceHelper;
 import com.project.bgt.common.serviceHelper.GameServiceHelper;
 import com.project.bgt.common.serviceHelper.ServiceHelper;
 import com.project.bgt.dto.ComponentDTO;
 import com.project.bgt.dto.GameComponentDTO;
 import com.project.bgt.dto.GameDTO;
+import com.project.bgt.dto.OriginalGameDTO;
 import com.project.bgt.exception.BadRequestException;
-import com.project.bgt.exception.EmailAlreadyExistsException;
 import com.project.bgt.exception.RecordNotFoundException;
-import com.project.bgt.exception.ResponseEntityBuilder;
-import com.project.bgt.exception.UsernameAlreadyExistsException;
 import com.project.bgt.model.Game;
 import com.project.bgt.model.Language;
 import com.project.bgt.model.User;
 import com.project.bgt.repository.GameRepository;
+import com.project.bgt.repository.OriginalGameRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.transaction.Transactional;
@@ -26,7 +23,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.NotFound;
 
 @Service
 public class GameService {
@@ -36,6 +32,7 @@ public class GameService {
   private ComponentService componentService;
   private UserService userService;
   private GameRepository gameRepository;
+  private OriginalGameRepository originalGameRepository;
 
   @Autowired
   public void setComponentService(ComponentService componentService) {
@@ -55,6 +52,11 @@ public class GameService {
   @Autowired
   public void setGameRepository(GameRepository gameRepository) {
     this.gameRepository = gameRepository;
+  }
+
+  @Autowired
+  public void setOriginalGameRepository(OriginalGameRepository originalGameRepository) {
+    this.originalGameRepository = originalGameRepository;
   }
 
 
@@ -118,7 +120,8 @@ public class GameService {
 
   public Game getGame(long gameId) {
     return gameRepository.findById(gameId)
-      .orElseThrow(() -> new RecordNotFoundException("Game with id: " + gameId + " was not found!"));
+      .orElseThrow(
+        () -> new RecordNotFoundException("Game with id: " + gameId + " was not found!"));
   }
 
   public GameDTO getGameDTO(long gameId) {
@@ -157,8 +160,8 @@ public class GameService {
     return gameComponents;
   }
 
-  public List<GameDTO> getOriginalGames() {
-    return gameServiceHelper.convertGamesToGameDTOs(gameRepository.findAllOriginalGames());
+  public List<OriginalGameDTO> getOriginalGamesDTO() {
+    return originalGameRepository.findAllOriginalGames();
   }
 
   public List<String> getGameLanguages(long gameId) {
@@ -167,9 +170,10 @@ public class GameService {
   }
 
   public void gameDoesNotExistById(long gameId) {
-    if(!gameRepository.existsById(gameId)){
+    if (!gameRepository.existsById(gameId)) {
       throw new RecordNotFoundException("Game with id: " + gameId + " was not found!");
     }
   }
+
 }
 

@@ -4,6 +4,7 @@ import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.common.serviceHelper.UserServiceHelper;
+import com.project.bgt.dto.IdDTO;
 import com.project.bgt.dto.UserDTO;
 import com.project.bgt.dto.UserRoleDTO;
 import com.project.bgt.exception.EmailAlreadyExistsException;
@@ -53,6 +54,15 @@ public class UserService {
   public User getUser(long userId) {
     return userRepository.findById(userId)
       .orElseThrow(() -> new RecordNotFoundException("User with id: " + userId + " was not found!"));
+  }
+
+  public User getUserByUsername(String username) {
+    return userRepository.findByUsername(username)
+      .orElseThrow(() -> new RecordNotFoundException("User with username: " + username + " was not found!"));
+  }
+
+  public IdDTO getUserIdByUsername(String username){
+    return new IdDTO(getUserByUsername(username).getId());
   }
 
   public UserDTO getUserDTO(long userId) {

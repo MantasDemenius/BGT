@@ -1,6 +1,7 @@
 package com.project.bgt.controller;
 
 import com.project.bgt.common.constant.PathConst;
+import com.project.bgt.dto.IdDTO;
 import com.project.bgt.dto.UserDTO;
 import com.project.bgt.dto.UserRoleDTO;
 import com.project.bgt.exception.RecordNotFoundException;
@@ -49,6 +50,12 @@ public class UserController {
   @GetMapping(PathConst.USER_PATH + "/{userId}")
   public UserDTO getUserById(@PathVariable(value = "userId") long userId) {
     return userService.getUserDTO(userId);
+  }
+
+  @PreAuthorize("hasAnyAuthority('BASIC', 'CREATOR', 'ADMIN')")
+  @GetMapping(PathConst.USER_PATH + "/{username}/id")
+  public IdDTO getUserIdByUsername(@PathVariable(value = "username") String username) {
+    return userService.getUserIdByUsername(username);
   }
 
   @PostMapping(PathConst.USER_PATH)

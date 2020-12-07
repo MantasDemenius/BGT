@@ -2,6 +2,7 @@ package com.project.bgt.security;
 
 import com.project.bgt.model.User;
 import com.project.bgt.repository.UserRepository;
+import com.project.bgt.service.UserService;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,11 @@ public class SecurityService implements UserDetailsService {
   private PasswordEncoder passwordEncoder;
 
   @Autowired
-  private UserRepository userRepository;
+  private UserService userService;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    User user = userRepository.findByUsername(username);
-    if (user == null) {
-      throw new UsernameNotFoundException(
-        String.format("User with username \"%s\" not found.", username));
-    }
+    User user = userService.getUserByUsername(username);
     return new Principal(user, getAuthority(user));
   }
 
@@ -41,9 +38,8 @@ public class SecurityService implements UserDetailsService {
 
     return authorities;
   }
-
-  public User getCurrentUser() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    return userRepository.findByUsername((String) authentication.getPrincipal());
-  }
+//  public User getCurrentUser() {
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    return userRepository.findByUsername((String) authentication.getPrincipal());
+//  }
 }

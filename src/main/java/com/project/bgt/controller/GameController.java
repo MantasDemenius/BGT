@@ -3,6 +3,7 @@ package com.project.bgt.controller;
 import com.project.bgt.common.constant.PathConst;
 import com.project.bgt.dto.GameComponentDTO;
 import com.project.bgt.dto.GameDTO;
+import com.project.bgt.dto.OriginalGameDTO;
 import com.project.bgt.exception.RecordNotFoundException;
 import com.project.bgt.service.GameService;
 import java.util.List;
@@ -78,8 +79,8 @@ public class GameController {
   }
 
   @GetMapping("/original")
-  public List<GameDTO> getOriginalGames(){
-    return gameService.getOriginalGames();
+  public List<OriginalGameDTO> getOriginalGames(){
+    return gameService.getOriginalGamesDTO();
   }
 
   @GetMapping("/{gameId}" + PathConst.LANGUAGE_PATH)

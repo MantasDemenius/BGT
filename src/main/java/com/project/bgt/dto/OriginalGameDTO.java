@@ -1,7 +1,7 @@
 package com.project.bgt.dto;
 
-import com.project.bgt.model.ComponentCategory;
 import com.sun.istack.NotNull;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -10,25 +10,22 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class ComponentDTO {
+public class OriginalGameDTO {
 
   @Id
   @NotNull
   long id;
-  //might find and take from game
-  @NotNull
-  long languageId;
 
-  @NotNull
-  long userId;
+  @NotBlank
+  @Size(min = 3, max = 20)
+  String language;
 
-  @NotNull
-  long gameId;
-
-  @NotNull
-  long originalComponentId;
+  @NotBlank
+  @Size(min = 3, max = 20)
+  String author;
 
   @NotBlank
   @Size(min = 3, max = 100)
@@ -37,11 +34,5 @@ public class ComponentDTO {
   @NotBlank
   @Size(min = 3, max = 2000)
   String description;
-
-  ComponentCategory category;
-
-  public boolean languageIdEquals(long languageId){
-    return this.languageId == languageId;
-  }
 
 }

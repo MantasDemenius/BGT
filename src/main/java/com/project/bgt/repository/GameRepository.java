@@ -13,18 +13,6 @@ public interface GameRepository extends JpaRepository<Game, Long> {
   List<Game> findAllByLanguageId(long languageId);
 
   @Query(
-    value = "select\n"
-      + "\tg.*\n"
-      + "from game g\n"
-      + "left join game_relationship gr\n"
-      + "\ton g.id = gr.translated_game_id\n"
-      + "where gr.original_game_id is null\n"
-      + "order by g.id",
-    nativeQuery = true
-  )
-  List<Game> findAllOriginalGames();
-
-  @Query(
     value = "with all_games as (\n"
       + "select \n"
       + "\tg.*\n"

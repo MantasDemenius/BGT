@@ -2,8 +2,6 @@ package com.project.bgt.dto;
 
 import com.sun.istack.NotNull;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,17 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LanguageDTO {
-
+public class IdDTO {
   @Id
   @NotNull
   long id;
-
-  @NotBlank
-  @Size(min = 3, max = 20)
-  String name;
-
-  @NotBlank
-  @Size(min = 2, max = 5)
-  String code;
 }
