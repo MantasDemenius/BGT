@@ -35,4 +35,6 @@ public class OriginalGameDTO {
   @Size(min = 3, max = 2000)
   String description;
 
+  String translatedLanguages;
+
 }

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -57,7 +56,7 @@ public class GameController {
     return gameService.updateGame(gameDto, gameId);
   }
 
-  @PreAuthorize("hasAnyAuthority('CREATOR', 'ADMIN')")
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
   @DeleteMapping("/{gameId}")
   public ResponseEntity deleteGame(@PathVariable(value = "gameId") long gameId) {
     return gameService.deleteGame(gameId);
@@ -79,17 +78,15 @@ public class GameController {
   }
 
   @GetMapping("/original")
-  public List<OriginalGameDTO> getOriginalGames(){
+  public List<OriginalGameDTO> getOriginalGames() {
     return gameService.getOriginalGamesDTO();
   }
 
   @GetMapping("/{gameId}" + PathConst.LANGUAGE_PATH)
-  public List<String> getGameLanguages(@PathVariable(value = "gameId") long gameId){
+  public List<String> getGameLanguages(@PathVariable(value = "gameId") long gameId) {
     return gameService.getGameLanguages(gameId);
   }
 }
-
-
 
 //Get all games in original languages DONE
 //Get all languages game is translated DONE
