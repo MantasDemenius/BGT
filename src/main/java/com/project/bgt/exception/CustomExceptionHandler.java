@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,21 +23,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-
-  @ExceptionHandler({Exception.class, URISyntaxException.class})
-  public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
-    List<String> errors = new ArrayList<String>();
-    errors.add(ex.getMessage());
-
-    ApiError err = new ApiError(
-      LocalDateTime.now(),
-      HttpStatus.INTERNAL_SERVER_ERROR,
-      errors
-    );
-
-    return ResponseEntityBuilder.build(err);
-  }
-
 
   @ExceptionHandler(UsernameAlreadyExistsException.class)
   public final ResponseEntity<Object> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
@@ -135,6 +121,34 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
       HttpStatus.FORBIDDEN,
       errors
     );
+    return ResponseEntityBuilder.build(err);
+  }
+
+  @ExceptionHandler(UsernameNotFoundException.class)
+  public final ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex,
+    WebRequest request) {
+    List<String> errors = new ArrayList<String>();
+    errors.add(ex.getMessage());
+
+    ApiError err = new ApiError(
+      LocalDateTime.now(),
+      HttpStatus.NOT_FOUND,
+      errors
+    );
+    return ResponseEntityBuilder.build(err);
+  }
+
+  @ExceptionHandler({Exception.class, URISyntaxException.class})
+  public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
+    List<String> errors = new ArrayList<String>();
+    errors.add(ex.getMessage());
+
+    ApiError err = new ApiError(
+      LocalDateTime.now(),
+      HttpStatus.INTERNAL_SERVER_ERROR,
+      errors
+    );
+
     return ResponseEntityBuilder.build(err);
   }
 

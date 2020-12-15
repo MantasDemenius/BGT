@@ -22,7 +22,6 @@ import com.project.bgt.security.SecurityService;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.internal.bytebuddy.build.Plugin.Engine.Source.Empty;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -135,8 +133,8 @@ class UserServiceTest {
     final User user = new User("username", "email", "password");
     ResponseEntity expectedResult = new ResponseEntity(HttpStatus.NO_CONTENT);
 
-    when(userRepository.existsByUsername("username")).thenReturn(false);
-    when(userRepository.existsByEmail("email")).thenReturn(false);
+    when(userRepository.existsByUsernameIgnoreCase("username")).thenReturn(false);
+    when(userRepository.existsByEmailIgnoreCase("email")).thenReturn(false);
     when(userRepository.findById(any(Long.class))).thenReturn(Optional.of(user));
     when(userRepository.save(user)).thenReturn(user);
     when(mockPasswordEncoder.encode("rawPassword")).thenReturn("result");
@@ -199,7 +197,7 @@ class UserServiceTest {
   @Test
   void userExistsByUsername_NonExistentUsername__() {
     // Setup
-    when(userRepository.existsByUsername("username")).thenReturn(false);
+    when(userRepository.existsByUsernameIgnoreCase("username")).thenReturn(false);
     // Run the test
     userServiceUnderTest.userExistsByUsername("username");
     // Verify the results
@@ -209,7 +207,7 @@ class UserServiceTest {
   void userExistsByUsername_ExistentUsername_UsernameAlreadyExistsException() {
     // Setup
     String expectedMessage = "Username: username is already taken!";
-    when(userRepository.existsByUsername("username")).thenReturn(true);
+    when(userRepository.existsByUsernameIgnoreCase("username")).thenReturn(true);
 
     // Run the test
     Exception exception = Assertions.assertThrows(UsernameAlreadyExistsException.class, () -> {
@@ -224,7 +222,7 @@ class UserServiceTest {
   @Test
   void userExistsByEmail_NonExistentEmail__() {
     // Setup
-    when(userRepository.existsByEmail("email")).thenReturn(false);
+    when(userRepository.existsByEmailIgnoreCase("email")).thenReturn(false);
     // Run the test
     userServiceUnderTest.userExistsByEmail("email");
 
@@ -235,7 +233,7 @@ class UserServiceTest {
   void userExistsByEmail_ExistentEmail_EmailAlreadyExistsException() {
     // Setup
     String expectedMessage = "Email: email is already taken!";
-    when(userRepository.existsByEmail("email")).thenReturn(true);
+    when(userRepository.existsByEmailIgnoreCase("email")).thenReturn(true);
 
     // Run the test
     Exception exception = Assertions.assertThrows(EmailAlreadyExistsException.class, () -> {
@@ -263,8 +261,8 @@ class UserServiceTest {
     final UserDTO userDTO = new UserDTO(0L, "username", "email", "password");
     final User user = new User("username", "email", "password");
 
-    when(userRepository.existsByUsername("username")).thenReturn(false);
-    when(userRepository.existsByEmail("email")).thenReturn(false);
+    when(userRepository.existsByUsernameIgnoreCase("username")).thenReturn(false);
+    when(userRepository.existsByEmailIgnoreCase("email")).thenReturn(false);
     when(userRepository.save(any(User.class))).thenReturn(user);
     when(mockPasswordEncoder.encode("password")).thenReturn("password");
     mockRoleRepositoryFindByName();

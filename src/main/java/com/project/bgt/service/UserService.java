@@ -2,24 +2,19 @@ package com.project.bgt.service;
 
 import com.project.bgt.common.LocationHeader;
 import com.project.bgt.common.constant.PathConst;
-import com.project.bgt.common.message.ErrorMessages;
 import com.project.bgt.common.serviceHelper.UserServiceHelper;
 import com.project.bgt.dto.IdDTO;
 import com.project.bgt.dto.UserDTO;
 import com.project.bgt.dto.UserRoleDTO;
 import com.project.bgt.exception.EmailAlreadyExistsException;
 import com.project.bgt.exception.RecordNotFoundException;
-import com.project.bgt.exception.ResponseEntityBuilder;
 import com.project.bgt.exception.UsernameAlreadyExistsException;
-import com.project.bgt.model.ApiError;
 import com.project.bgt.model.Role;
 import com.project.bgt.model.User;
 import com.project.bgt.model.UserRoleName;
 import com.project.bgt.repository.RoleRepository;
 import com.project.bgt.repository.UserRepository;
 import com.project.bgt.security.SecurityService;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,8 +52,12 @@ public class UserService {
   }
 
   public User getUserByUsername(String username) {
-    return userRepository.findByUsername(username)
+    return userRepository.findByUsernameIgnoreCase(username)
       .orElseThrow(() -> new RecordNotFoundException("User with username: " + username + " was not found!"));
+  }
+
+  public User getUserByUsernameNoException(String username) {
+    return userRepository.findByUsernameIgnoreCase(username).orElse(null);
   }
 
   public IdDTO getUserIdByUsername(String username){
@@ -126,13 +125,13 @@ public class UserService {
   }
 
   public void userExistsByUsername(String username) {
-    if (userRepository.existsByUsername(username)) {
+    if (userRepository.existsByUsernameIgnoreCase(username)) {
       throw new UsernameAlreadyExistsException("Username: " + username + " is already taken!");
     }
   }
 
   public void userExistsByEmail(String email) {
-    if (userRepository.existsByEmail(email)) {
+    if (userRepository.existsByEmailIgnoreCase(email)) {
       throw new EmailAlreadyExistsException("Email: " + email + " is already taken!");
     }
   }

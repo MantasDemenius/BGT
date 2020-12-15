@@ -28,6 +28,9 @@ public class SecurityService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     User user = userService.getUserByUsername(username);
+    if(user == null){
+      throw new UsernameNotFoundException(String.format("User with username: \"%s\" was not found.", username));
+    }
     return new Principal(user, getAuthority(user));
   }
 

@@ -5,9 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class BgtApplication {
-
-	public static void main(String[] args) {
-		SpringApplication.run(BgtApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(BgtApplication.class, args);
+  }
 }
